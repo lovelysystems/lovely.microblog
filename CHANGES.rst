@@ -5,4 +5,6 @@ Changes for Lovely Microblog
 unreleased
 ==========
 
-- initial commit
+ - added buildout
+
+ - initial commit
