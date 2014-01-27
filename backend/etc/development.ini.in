@@ -8,9 +8,11 @@ pyramid.debug_routematch = false
 pyramid.default_locale_name = en
 pyramid.includes =
     pyramid_mailer
-    pyramid_jinja2
 
-auth.secret = 1234
+auth.secret = 12345
+
+locale.dirs = ${buildout:directory}/locales
+
 
 crate.hosts = localhost:${ports:crate}
 crate.echo = True
@@ -18,9 +20,10 @@ sql.pool_size = 50
 sql.max_overflow = 50
 es.settings = ${buildout:directory}/etc/essettings.py
 
+
 mail.host = localhost
 mail.port = 25
-mail.default_sender = erni@stromberg.com
+mail.default_sender = hello@lovelysystems.com
 mail.min_avalanche_size = 2
 
 ###
@@ -58,4 +61,3 @@ formatter = generic
 
 [formatter_generic]
 format = %(asctime)s %(levelname)-5.5s [%(name)s] %(message)s
-
