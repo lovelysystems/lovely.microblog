@@ -1,13 +1,17 @@
 import os
 import re
 import ConfigParser
+
 from setuptools import setup, find_packages
+
+
+execfile(os.path.join(os.path.dirname(__file__), 'microblog/__init__.py'))
 
 versionf_content = open("microblog/__init__.py").read()
 version_rex = r'^__version__ = [\'"]([^\'"]*)[\'"]$'
 m = re.search(version_rex, versionf_content, re.M)
 if m:
-    version = m.group(1)
+    VERSION = m.group(1)
 else:
     raise RuntimeError('Unable to find version string')
 
@@ -36,39 +40,31 @@ def nailed_requires(requirements, pat=re.compile(r'^(.+)(\[.+\])?$')):
             res.append(req)
     return res
 
-
-def read(path):
-    return open(os.path.join(os.path.dirname(__file__), path)).read()
-
-
-here = os.path.abspath(os.path.dirname(__file__))
-readme = open(os.path.join(here, 'README.rst')).read()
-
 requires = [
+
     'crate [sqlalchemy]',
+
+
     'gevent',
     'pyramid',
+    'pyramid_jinja2',
+    'pyramid_mailer',
     'validictory',
+    'python-dateutil',
     'lovely.pyrest',
+
 ]
 
 setup(name='microblog',
-      version=version,
-      description='Creating high scalable web-backends for iOS-Devs',
-      long_description=readme,
-      classifiers=[
-          "Programming Language :: Python",
-      ],
-      author='lovely systems',
-      author_email='office@lovelysystems.com',
-      url='https://github.com/lovelysystems/lovely.microblog',
-      keywords='pyramid rest framework',
-      license='apache license 2.0',
+      version=VERSION,
+      author='Lovely Systems',
+      author_email='hello@lovelysystems.com',
       packages=find_packages(),
       include_package_data=True,
+      extras_require=dict(
+      ),
       zip_safe=False,
       install_requires=requires,
-      test_suite="microblog",
       entry_points={
           'paste.app_factory': [
               'main=microblog.server:app_factory',

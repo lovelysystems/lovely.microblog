@@ -16,3 +16,9 @@ testing.ini
 .coverage
 var/crate
 var/export.db
+nginx/nginx.conf
+nginx/logs/
+deploy/doc
+deploy/files/supervisord.conf
+deploy/files/supervisord.init.d
+deploy/files/config.ini
