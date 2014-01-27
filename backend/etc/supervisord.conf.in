@@ -17,10 +17,13 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 [supervisorctl]
 serverurl = http://localhost:${ports:supervisor}
 
+
 [program:crate]
 command = ${crate:location}/bin/crate -f -Des.cluster.name=${crate:cluster_name} -Des.config=${buildout:directory}/etc/crate.yml
 priority = 11
 redirect_stderr=true
+
+
 
 [program:app]
 command = ${buildout:bin-directory}/app
