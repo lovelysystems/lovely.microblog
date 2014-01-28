@@ -1,19 +1,20 @@
-//
-//  AppDelegate.m
-//  microblog
-//
-//  Created by Philipp Bogensberger on 28.01.14.
-//  Copyright (c) 2014 lovelysystems. All rights reserved.
-//
+//  Copyright (c) 2014 lovelysystems.
 
 #import "AppDelegate.h"
+#import "TimelineViewController.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
+    // TimeLineViewController
+    TimelineViewController* timeLineViewController = [[TimelineViewController alloc] initWithNibName:nil bundle:nil];
+    UINavigationController* timeLineNavigationController = [[UINavigationController alloc] initWithRootViewController:timeLineViewController];
+    timeLineNavigationController.title = @"Timeline";
+    UITabBarController* rootViewController = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
+    rootViewController.viewControllers = @[timeLineNavigationController];
+    self.window.rootViewController = rootViewController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
