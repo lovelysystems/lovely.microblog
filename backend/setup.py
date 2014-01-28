@@ -41,14 +41,13 @@ def nailed_requires(requirements, pat=re.compile(r'^(.+)(\[.+\])?$')):
     return res
 
 requires = [
-
     'crate [sqlalchemy]',
-
-
     'gevent',
     'pyramid',
     'pyramid_jinja2',
     'pyramid_mailer',
+    'pyramid_tm',
+    'zope.sqlalchemy',
     'validictory',
     'python-dateutil',
     'lovely.pyrest',

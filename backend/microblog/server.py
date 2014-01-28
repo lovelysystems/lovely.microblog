@@ -13,10 +13,11 @@ def app_factory(global_config, **settings):
     This must be setup as the paste.app_factory in the egg entry-points.
     """
     config = Configurator(settings=settings, autocommit=True)
+    config.include('microblog.blogpost.service')
+    config.scan('microblog.blogpost')
     crate_init(config)
 
     return config.make_wsgi_app()
-
 
 
 def crate_init(config):
