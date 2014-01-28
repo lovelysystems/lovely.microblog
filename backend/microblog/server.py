@@ -16,12 +16,13 @@ def app_factory(global_config, **settings):
 
     # this commit is required to make sure the defined base routes has been
     # added
+    config.include('microblog.blogpost.service')
+    config.include('microblog.users')
     config.commit()
-
+    config.scan('microblog.blogpost')
     crate_init(config)
 
     return config.make_wsgi_app()
-
 
 
 def crate_init(config):
