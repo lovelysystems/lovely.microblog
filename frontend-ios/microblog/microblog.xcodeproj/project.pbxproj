@@ -317,6 +317,7 @@
 				17932AF81897A59300FC5149 /* AppDelegate.m in Sources */,
 				17932AF41897A59300FC5149 /* main.m in Sources */,
 				17388AEA18991BC30045F6C0 /* BlogPost.m in Sources */,
+				17388AEE189936030045F6C0 /* BlogPostTableViewCell.m in Sources */,
 				176949A31897ABF5007EE309 /* TimelineViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

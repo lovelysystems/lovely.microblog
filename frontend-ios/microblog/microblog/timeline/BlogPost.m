@@ -14,4 +14,12 @@
     return mapping;
 }
 
+-(NSString*)formattedDate {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setDoesRelativeDateFormatting:YES];
+    return [dateFormatter stringFromDate:self.created];
+}
+
 @end
