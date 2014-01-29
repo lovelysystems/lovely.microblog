@@ -10,6 +10,7 @@
 @property(nonatomic, copy) NSString* text;
 @property(nonatomic, copy) NSString* creator;
 
+-(NSString*)formattedDate;
 +(RKObjectMapping *)mapping;
 
 @end
