@@ -4,5 +4,6 @@
 
 @interface TimelineViewController : UITableViewController
 
+-(void)refresh:(id)sender;
 
 @end

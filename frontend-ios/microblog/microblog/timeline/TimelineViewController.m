@@ -26,6 +26,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self
+                            action:@selector(refresh:)
+                  forControlEvents:UIControlEventValueChanged];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -53,9 +57,14 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [self refresh:nil];
+}
+
+- (void)refresh:(id)sender {
     [[RKObjectManager sharedManager] getObjectsAtPath:@"/blogpost" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.blogPosts = [mappingResult array];
         [self.tableView reloadData];
+        [self.refreshControl endRefreshing];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         // DO nothing
     }];
