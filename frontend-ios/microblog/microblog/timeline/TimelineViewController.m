@@ -2,6 +2,7 @@
 
 #import "TimelineViewController.h"
 #import "BlogPost.h"
+#import "BlogPostTableViewCell.h"
 #import <RestKit/RestKit.h>
 
 @interface TimelineViewController ()
@@ -35,14 +36,19 @@
     return [self.blogPosts count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return [BlogPostTableViewCell heightForBlogPost:[self.blogPosts objectAtIndex:indexPath.row]];
+}
+
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"TimelineTableViewCell";
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    BlogPostTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if( cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[BlogPostTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     }
     BlogPost* blogPost = [self.blogPosts objectAtIndex:indexPath.row];
-    cell.textLabel.text = blogPost.text;
+    [cell setBlogPost:blogPost];
     return cell;
 }
 
