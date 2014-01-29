@@ -9,7 +9,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // TimeLineViewController
-    TimelineViewController* timeLineViewController = [[TimelineViewController alloc] initWithNibName:nil bundle:nil];
+    TimelineViewController* timeLineViewController = [[TimelineViewController alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController* timeLineNavigationController = [[UINavigationController alloc] initWithRootViewController:timeLineViewController];
     timeLineNavigationController.title = @"Timeline";
     UITabBarController* rootViewController = [[UITabBarController alloc] initWithNibName:nil bundle:nil];

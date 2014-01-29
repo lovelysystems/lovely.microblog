@@ -2,6 +2,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TimelineViewController : UIViewController
+
+@interface TimelineViewController : UITableViewController
 
 @end
