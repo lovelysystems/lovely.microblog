@@ -2,12 +2,17 @@
 
 #import "AppDelegate.h"
 #import "TimelineViewController.h"
+#import <RestKit/RestKit.h>
+#import "BlogPost.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    [self setUpRestKit];
+    
     // TimeLineViewController
     TimelineViewController* timeLineViewController = [[TimelineViewController alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController* timeLineNavigationController = [[UINavigationController alloc] initWithRootViewController:timeLineViewController];
@@ -18,6 +23,21 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (void)setUpRestKit {
+    RKObjectManager* manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost:9210"]];
+    [manager.HTTPClient setParameterEncoding:AFJSONParameterEncoding];
+    [manager setRequestSerializationMIMEType:RKMIMETypeJSON];
+    
+    NSIndexSet* statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    RKResponseDescriptor* blogPostRD = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
+                                                                                    method:RKRequestMethodAny
+                                                                               pathPattern:@"/blogpost"
+                                                                                    keyPath:@"data.blogposts"
+                                                                               statusCodes:statusCodes];
+    [manager addResponseDescriptorsFromArray:@[blogPostRD]];
+    [RKObjectManager setSharedManager:manager];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -1,10 +1,4 @@
-//
-//  AppDelegate.h
-//  microblog
-//
-//  Created by Philipp Bogensberger on 28.01.14.
-//  Copyright (c) 2014 lovelysystems. All rights reserved.
-//
+//  Copyright (c) 2014 lovelysystems.
 
 #import <UIKit/UIKit.h>
 
