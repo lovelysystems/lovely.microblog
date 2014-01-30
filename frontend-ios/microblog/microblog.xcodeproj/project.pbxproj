@@ -11,6 +11,10 @@
 		17388AEB18991BC30045F6C0 /* BlogPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 17388AE918991BC30045F6C0 /* BlogPost.m */; };
 		17388AEE189936030045F6C0 /* BlogPostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 17388AED189936030045F6C0 /* BlogPostTableViewCell.m */; };
 		17388AEF189936030045F6C0 /* BlogPostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 17388AED189936030045F6C0 /* BlogPostTableViewCell.m */; };
+		173D6101189956F100F20D7A /* CreateBlogPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 173D6100189956F100F20D7A /* CreateBlogPostViewController.m */; };
+		173D6102189956F100F20D7A /* CreateBlogPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 173D6100189956F100F20D7A /* CreateBlogPostViewController.m */; };
+		173D610518995A2500F20D7A /* CreateBlogPostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 173D610418995A2500F20D7A /* CreateBlogPostView.m */; };
+		173D610618995A2500F20D7A /* CreateBlogPostView.m in Sources */ = {isa = PBXBuildFile; fileRef = 173D610418995A2500F20D7A /* CreateBlogPostView.m */; };
 		176949A31897ABF5007EE309 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176949A21897ABF5007EE309 /* TimelineViewController.m */; };
 		176949A41897ABF5007EE309 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 176949A21897ABF5007EE309 /* TimelineViewController.m */; };
 		17932AE81897A59300FC5149 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17932AE71897A59300FC5149 /* Foundation.framework */; };
@@ -43,6 +47,10 @@
 		17388AE918991BC30045F6C0 /* BlogPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlogPost.m; sourceTree = "<group>"; };
 		17388AEC189936030045F6C0 /* BlogPostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlogPostTableViewCell.h; sourceTree = "<group>"; };
 		17388AED189936030045F6C0 /* BlogPostTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlogPostTableViewCell.m; sourceTree = "<group>"; };
+		173D60FF189956F100F20D7A /* CreateBlogPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateBlogPostViewController.h; sourceTree = "<group>"; };
+		173D6100189956F100F20D7A /* CreateBlogPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateBlogPostViewController.m; sourceTree = "<group>"; };
+		173D610318995A2500F20D7A /* CreateBlogPostView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateBlogPostView.h; sourceTree = "<group>"; };
+		173D610418995A2500F20D7A /* CreateBlogPostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateBlogPostView.m; sourceTree = "<group>"; };
 		176949A11897ABF5007EE309 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		176949A21897ABF5007EE309 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
 		17932AE41897A59300FC5149 /* microblog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = microblog.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,6 +107,10 @@
 				17388AE918991BC30045F6C0 /* BlogPost.m */,
 				17388AEC189936030045F6C0 /* BlogPostTableViewCell.h */,
 				17388AED189936030045F6C0 /* BlogPostTableViewCell.m */,
+				173D60FF189956F100F20D7A /* CreateBlogPostViewController.h */,
+				173D6100189956F100F20D7A /* CreateBlogPostViewController.m */,
+				173D610318995A2500F20D7A /* CreateBlogPostView.h */,
+				173D610418995A2500F20D7A /* CreateBlogPostView.m */,
 			);
 			path = timeline;
 			sourceTree = "<group>";
@@ -318,6 +330,8 @@
 				17932AF41897A59300FC5149 /* main.m in Sources */,
 				17388AEA18991BC30045F6C0 /* BlogPost.m in Sources */,
 				17388AEE189936030045F6C0 /* BlogPostTableViewCell.m in Sources */,
+				173D6101189956F100F20D7A /* CreateBlogPostViewController.m in Sources */,
+				173D610518995A2500F20D7A /* CreateBlogPostView.m in Sources */,
 				176949A31897ABF5007EE309 /* TimelineViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -326,10 +340,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				173D610618995A2500F20D7A /* CreateBlogPostView.m in Sources */,
 				17932B0D1897A59300FC5149 /* microblogTests.m in Sources */,
 				176949A41897ABF5007EE309 /* TimelineViewController.m in Sources */,
 				17388AEF189936030045F6C0 /* BlogPostTableViewCell.m in Sources */,
 				17388AEB18991BC30045F6C0 /* BlogPost.m in Sources */,
+				173D6102189956F100F20D7A /* CreateBlogPostViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
