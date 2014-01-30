@@ -31,12 +31,24 @@
     [manager setRequestSerializationMIMEType:RKMIMETypeJSON];
     
     NSIndexSet* statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
-    RKResponseDescriptor* blogPostRD = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
-                                                                                    method:RKRequestMethodAny
+    RKResponseDescriptor* blogPostGetResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
+                                                                                    method:RKRequestMethodGET
                                                                                pathPattern:@"/blogpost"
                                                                                     keyPath:@"data.blogposts"
                                                                                statusCodes:statusCodes];
-    [manager addResponseDescriptorsFromArray:@[blogPostRD]];
+    
+    RKResponseDescriptor* blogPostPostResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
+                                                                                    method:RKRequestMethodPOST
+                                                                               pathPattern:@"/blogpost"
+                                                                                   keyPath:nil
+                                                                               statusCodes:statusCodes];
+    
+    RKRequestDescriptor* blogPostReqD = [RKRequestDescriptor requestDescriptorWithMapping:[[BlogPost mapping] inverseMapping]
+                                                                              objectClass:[BlogPost class]
+                                                                              rootKeyPath:nil
+                                                                                   method:RKRequestMethodPOST];
+    [manager addResponseDescriptorsFromArray:@[blogPostGetResponse, blogPostPostResponse]];
+    [manager addRequestDescriptor:blogPostReqD];
     [RKObjectManager setSharedManager:manager];
 }
 

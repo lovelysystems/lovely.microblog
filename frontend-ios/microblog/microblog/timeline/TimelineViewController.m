@@ -9,6 +9,8 @@
 
 @property(nonatomic)NSArray* blogPosts;
 
+-(void)createNewBlogPost:(id)sender;
+
 @end
 
 @implementation TimelineViewController
@@ -19,6 +21,10 @@
     if(self){
         self.title = @"Timeline";
         self.blogPosts = @[];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New Post"
+                                                                                  style:UIBarButtonItemStylePlain
+                                                                                 target:self
+                                                                                 action:@selector(createNewBlogPost:)];
     }
     return self;
 }
@@ -68,6 +74,18 @@
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         // DO nothing
     }];
+}
+
+- (void)createNewBlogPost:(id)sender {
+    CreateBlogPostViewController* blogPostController = [[CreateBlogPostViewController alloc] initWithNibName:nil bundle:nil];
+    [blogPostController setDelegate:self];
+    UINavigationController* blogPostNavigationController = [[UINavigationController alloc] initWithRootViewController:blogPostController];
+    [self presentViewController:blogPostNavigationController animated:YES completion:nil];
+}
+
+- (void)dismissCreateBlogPost {
+    [self refresh:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
