@@ -5,6 +5,8 @@ Changes for Lovely Microblog
 unreleased
 ==========
 
+ - added tutorial for reading and creating blogposts
+
  - tutorial: project setup
 
  - added sphinx-setup
