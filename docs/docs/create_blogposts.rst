@@ -7,7 +7,7 @@ As next step we want to create and list BlogPosts.
 blogpost table
 ==============
 
-We want the Blogposts to have this columns::
+We want the Blogposts to have these columns::
 
     - id: primary key
     - text: content of the post
