@@ -18,3 +18,4 @@ Contents:
    requirements.rst
    setup.rst
    start_coding.rst
+   create_blogposts.rst
