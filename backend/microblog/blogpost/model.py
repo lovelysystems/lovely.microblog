@@ -1,10 +1,5 @@
 from sqlalchemy import Column, String, DateTime
-from microblog.model import Base
-import uuid
-
-
-def genuuid():
-    return str(uuid.uuid4())
+from microblog.model import Base, genuuid
 
 
 class BlogPost(Base):
