@@ -67,12 +67,14 @@
 }
 
 - (void)refresh:(id)sender {
-    [[RKObjectManager sharedManager] getObjectsAtPath:@"/blogpost" parameters:nil success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    [[RKObjectManager sharedManager] getObjectsAtPath:@"/blogposts"
+                                           parameters:nil
+                                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.blogPosts = [mappingResult array];
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-        // DO nothing
+        // TODO: handle the errors
     }];
 }
 

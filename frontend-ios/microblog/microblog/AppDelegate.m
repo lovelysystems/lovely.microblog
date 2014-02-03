@@ -10,16 +10,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
     [self setUpRestKit];
     
     // TimeLineViewController
     TimelineViewController* timeLineViewController = [[TimelineViewController alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController* timeLineNavigationController = [[UINavigationController alloc] initWithRootViewController:timeLineViewController];
     timeLineNavigationController.title = @"Timeline";
-    UITabBarController* rootViewController = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
-    rootViewController.viewControllers = @[timeLineNavigationController];
-    self.window.rootViewController = rootViewController;
+    self.window.rootViewController = timeLineNavigationController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
@@ -33,13 +30,13 @@
     NSIndexSet* statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKResponseDescriptor* blogPostGetResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
                                                                                     method:RKRequestMethodGET
-                                                                               pathPattern:@"/blogpost"
+                                                                               pathPattern:@"/blogposts"
                                                                                     keyPath:@"data.blogposts"
                                                                                statusCodes:statusCodes];
     
     RKResponseDescriptor* blogPostPostResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
                                                                                     method:RKRequestMethodPOST
-                                                                               pathPattern:@"/blogpost"
+                                                                               pathPattern:@"/blogposts"
                                                                                    keyPath:nil
                                                                                statusCodes:statusCodes];
     
