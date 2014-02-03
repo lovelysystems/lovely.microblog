@@ -1,7 +1,9 @@
-from lovely.pyrest.rest import RestService, rpcmethod_route
+from pyramid import security
+from lovely.pyrest.rest import RestService, rpcmethod_route, rpcmethod_view
 from microblog.blogpost.model import BlogPost
 from datetime import datetime
 from ..model import DBSession, refresher
+from microblog.server import AuthACLFactory
 
 
 @RestService('blogposts')
@@ -25,6 +27,7 @@ class BlogPostService(object):
         return {"data": {"blogposts": result}}
 
     @rpcmethod_route(request_method="POST")
+    @rpcmethod_view(permission=security.Authenticated)
     @refresher
     def create(self, text):
         """ Create a blogpost with the given text
@@ -32,7 +35,8 @@ class BlogPostService(object):
         blogpost = BlogPost()
         blogpost.text = text
         blogpost.created = datetime.now()
-        blogpost.creator = 'anonym'
+        user = security.authenticated_userid(self.request)
+        blogpost.creator = user
         DBSession.add(blogpost)
         DBSession.flush()
         return {"id": blogpost.id}
@@ -40,4 +44,4 @@ class BlogPostService(object):
 
 def includeme(config):
     # Add the blogposts route
-    config.add_route('blogposts', '/blogposts', static=True)
+    config.add_route('blogposts', '/blogposts', static=True, factory=AuthACLFactory)
