@@ -2,7 +2,7 @@
 Create Blogposts
 ================
 
-As next step we want to create and list BlogPosts.
+As next step we want to create and list blogposts.
 
 blogpost table
 ==============
@@ -17,7 +17,7 @@ We want the Blogposts to have these columns::
 Open the file `<project-dir>/etc/crate_setup.sql` and add the following sql
 expression::
 
-    create table blogpost (id string primary key, created timestamp, text string, creator string )
+    create table blogpost (id string primary key, created timestamp, text string, creator string)
 
 Add the following line to the `create_cleanup.sql` file::
 
@@ -61,7 +61,7 @@ If you want to reset crate run::
 .. note::
 
    The crate_cleanup and crate_setup scripts just pipe the contents of the sql
-   files to bin/crash. So every line in the script gets executed as  a separate
+   files to bin/crash. So every line in the script gets executed as a separate
    command. Consequential you cannot split an expression into multiple lines
    and you have to ommit semicolons at the end of the statements.
 
