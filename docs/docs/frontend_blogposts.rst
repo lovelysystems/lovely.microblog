@@ -36,7 +36,7 @@ We want to present the created blogposts in a UITableView.
 
 Create a Controller named `TimelineViewController` which inherits from
 UITableViewController.
-This is what the controller looks like::
+This is what the controller looks like:
 
 TimelineViewController.h::
 
@@ -185,7 +185,7 @@ Within the first four lines we setup a RKObjectManager with the base url
 of the backend. We also define that the manager sends json and interprets
 the response data as json.
 
-The ResponseDescriptor defines that the `/blogpost` endpoint should return
+The ResponseDescriptor defines that the `/blogposts` endpoint should return
 a 200 OK status when a GET request gets performed. The returned json contains
 a data object with a blogposts list (KeyPath: data.blogposts). Every object in
 this list should be deserialized as `BlogPost` object using the
@@ -318,3 +318,32 @@ delegate::
 This is what the app looks like:
 
     .. image:: images/ios_list_posts_2.png
+
+Pull to Refresh
+===============
+
+To implement `Pull to Refresh` just add a `UIRefreshControl` in `viewDidLoad`,
+which calls the refresh method::
+
+    - (void)viewDidLoad
+    {
+        [super viewDidLoad];
+        self.refreshControl = [[UIRefreshControl alloc] init];
+        [self.refreshControl addTarget:self
+                                action:@selector(refresh:)
+                      forControlEvents:UIControlEventValueChanged];
+    }
+
+It's also necessary to end refreshing after the data is loaded. So add the the
+following line to the `success` and `failure` blocks located in the refresh
+method::
+
+    [self.refreshControl endRefreshing];
+
+So the success block looks like::
+
+    success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+        self.blogPosts = [mappingResult array];
+        [self.tableView reloadData];
+        [self.refreshControl endRefreshing];
+    }
