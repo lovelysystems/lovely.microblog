@@ -46,7 +46,7 @@
     BlogPost* post = [[BlogPost alloc] init];
     post.text = [(CreateBlogPostView*)self.view textView].text;
     [[RKObjectManager sharedManager] postObject:post
-                                           path:@"blogpost"
+                                           path:@"/blogposts"
                                      parameters:nil
                                         success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                             [self dismiss:nil];
