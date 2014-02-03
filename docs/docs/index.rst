@@ -19,3 +19,4 @@ Contents:
    setup.rst
    start_coding.rst
    create_blogposts.rst
+   frontend_blogposts.rst
