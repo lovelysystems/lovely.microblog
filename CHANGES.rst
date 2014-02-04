@@ -5,6 +5,8 @@ Changes for Lovely Microblog
 unreleased
 ==========
 
+ - added tutorial for authentication in backend
+
  - backend: added user and authentication handling
 
  - added tutorial for creating blogposts in frontent
