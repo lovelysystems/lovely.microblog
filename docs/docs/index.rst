@@ -22,3 +22,4 @@ Contents:
    frontend_blogposts.rst
    frontend_create_post.rst
    be_authentication.rst
+   frontend_login.rst

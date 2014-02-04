@@ -15,6 +15,10 @@ If you prefer using `macports <http://http://www.macports.org>`_ run::
 
     sudo port install python27
 
+The following additional packages need to be installed::
+
+    brew install libevent
+
 Java 7
 ======
 
