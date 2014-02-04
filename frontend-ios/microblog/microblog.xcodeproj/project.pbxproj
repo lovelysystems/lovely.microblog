@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		171E253818A11F9F003ADA7A /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 171E253718A11F9F003ADA7A /* User.m */; };
+		171E253B18A12979003ADA7A /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 171E253A18A12979003ADA7A /* LoginView.m */; };
+		171E253E18A1298B003ADA7A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171E253D18A1298B003ADA7A /* LoginViewController.m */; };
 		17388AEA18991BC30045F6C0 /* BlogPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 17388AE918991BC30045F6C0 /* BlogPost.m */; };
 		17388AEB18991BC30045F6C0 /* BlogPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 17388AE918991BC30045F6C0 /* BlogPost.m */; };
 		17388AEE189936030045F6C0 /* BlogPostTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 17388AED189936030045F6C0 /* BlogPostTableViewCell.m */; };
@@ -43,6 +46,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		171E253618A11F9F003ADA7A /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		171E253718A11F9F003ADA7A /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		171E253918A12979003ADA7A /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		171E253A18A12979003ADA7A /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
+		171E253C18A1298B003ADA7A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		171E253D18A1298B003ADA7A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		17388AE818991BC30045F6C0 /* BlogPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlogPost.h; sourceTree = "<group>"; };
 		17388AE918991BC30045F6C0 /* BlogPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlogPost.m; sourceTree = "<group>"; };
 		17388AEC189936030045F6C0 /* BlogPostTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlogPostTableViewCell.h; sourceTree = "<group>"; };
@@ -98,6 +107,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		171E253518A11F8D003ADA7A /* user */ = {
+			isa = PBXGroup;
+			children = (
+				171E253618A11F9F003ADA7A /* User.h */,
+				171E253718A11F9F003ADA7A /* User.m */,
+				171E253918A12979003ADA7A /* LoginView.h */,
+				171E253A18A12979003ADA7A /* LoginView.m */,
+				171E253C18A1298B003ADA7A /* LoginViewController.h */,
+				171E253D18A1298B003ADA7A /* LoginViewController.m */,
+			);
+			path = user;
+			sourceTree = "<group>";
+		};
 		1769499F1897AB07007EE309 /* timeline */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,13 +135,6 @@
 				173D610418995A2500F20D7A /* CreateBlogPostView.m */,
 			);
 			path = timeline;
-			sourceTree = "<group>";
-		};
-		176949A01897AB07007EE309 /* user */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = user;
 			sourceTree = "<group>";
 		};
 		17932ADB1897A59300FC5149 = {
@@ -157,8 +172,8 @@
 		17932AED1897A59300FC5149 /* microblog */ = {
 			isa = PBXGroup;
 			children = (
+				171E253518A11F8D003ADA7A /* user */,
 				1769499F1897AB07007EE309 /* timeline */,
-				176949A01897AB07007EE309 /* user */,
 				17932AF61897A59300FC5149 /* AppDelegate.h */,
 				17932AF71897A59300FC5149 /* AppDelegate.m */,
 				17932AF91897A59300FC5149 /* Images.xcassets */,
@@ -326,8 +341,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				171E253818A11F9F003ADA7A /* User.m in Sources */,
 				17932AF81897A59300FC5149 /* AppDelegate.m in Sources */,
 				17932AF41897A59300FC5149 /* main.m in Sources */,
+				171E253B18A12979003ADA7A /* LoginView.m in Sources */,
+				171E253E18A1298B003ADA7A /* LoginViewController.m in Sources */,
 				17388AEA18991BC30045F6C0 /* BlogPost.m in Sources */,
 				17388AEE189936030045F6C0 /* BlogPostTableViewCell.m in Sources */,
 				173D6101189956F100F20D7A /* CreateBlogPostViewController.m in Sources */,

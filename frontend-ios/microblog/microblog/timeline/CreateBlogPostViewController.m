@@ -51,6 +51,15 @@
                                         success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                             [self dismiss:nil];
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        if(operation.HTTPRequestOperation.response.statusCode == 403){
+            LoginViewController* loginViewController = [[LoginViewController alloc] initWithNibName:nil
+                                                                                             bundle:nil];
+            [loginViewController setDelegate:self];
+            UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController
+                               animated:YES
+                             completion:nil];
+        }
         [(CreateBlogPostView*)self.view showError:@"An error occured, please try again later."];
     }];
     
@@ -62,6 +71,14 @@
 
 - (void)dismiss:(id)sender {
     [self.delegate dismissCreateBlogPost];
+}
+
+- (void)loginViewController:(LoginViewController *)loginViewController didFinishWithLogin:(BOOL)loggedIn {
+    [self dismissViewControllerAnimated:YES completion:^(){
+        if(loggedIn){
+            [self sendPost:nil];
+        }
+    }];
 }
 
 @end
