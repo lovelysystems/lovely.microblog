@@ -35,7 +35,7 @@ Install cookiecutter::
 
 Create the microblog project::
 
-    sh$ cookiecutter https://github.com/lovelysystems/cookiecutter-lovely-setup
+    sh$ cookiecutter git@github.com:lovelysystems/cookiecutter-lovely-setup
 
 Cookiecutter wants some input. Except for the `repo_name` you can leave the fields
 blank and just press Enter to use the defaults. Of course you may
