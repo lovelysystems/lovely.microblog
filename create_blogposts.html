@@ -59,10 +59,10 @@
             
   <div class="section" id="create-blogposts">
 <h1>Create Blogposts<a class="headerlink" href="#create-blogposts" title="Permalink to this headline">¶</a></h1>
-<p>As next step we want to create and list blogposts.</p>
-<div class="section" id="blogpost-table">
-<h2>blogpost table<a class="headerlink" href="#blogpost-table" title="Permalink to this headline">¶</a></h2>
-<p>We want the Blogposts to have these columns:</p>
+<p>As a next step we want to create and list blogposts.</p>
+<div class="section" id="table-blogpost">
+<h2>Table blogpost<a class="headerlink" href="#table-blogpost" title="Permalink to this headline">¶</a></h2>
+<p>We want the <cite>blogpost</cite> table to have these columns:</p>
 <div class="highlight-python"><pre>- id: primary key
 - text: content of the post
 - created: current timestamp, so we can order the posts chronological
@@ -111,7 +111,7 @@ CREATE OK (0.083 sec)</pre>
 <p class="first admonition-title">Note</p>
 <p class="last">The crate_cleanup and crate_setup scripts just pipe the contents of the sql
 files to bin/crash. So every line in the script gets executed as a separate
-command. Consequential you cannot split an expression into multiple lines
+command. Therefore you cannot split an expression into multiple lines
 and you have to ommit semicolons at the end of the statements.</p>
 </div>
 <p>You can open the following url with your browser to
@@ -120,10 +120,10 @@ access the crate admin interface and inspect the created table:</p>
 </div>
 </div>
 <div class="section" id="blogpost-sql-alchemy-model">
-<h2>BlogPost SQL Alchemy model<a class="headerlink" href="#blogpost-sql-alchemy-model" title="Permalink to this headline">¶</a></h2>
+<h2>BlogPost SQL Alchemy Model<a class="headerlink" href="#blogpost-sql-alchemy-model" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="http://www.sqlalchemy.org">SQLAlchemy</a> is a python SQL toolkit and Object Relational
 Mapper.
-Let&#8217;s create a BlogPost model which is the python representation of the already
+Let&#8217;s create a <cite>BlogPost</cite> model which is the python representation of the already
 created <cite>blogpost</cite> table.
 Add a new file named <cite>model.py</cite> into the <cite>blogpost</cite> module with the following
 contents:</p>
@@ -146,13 +146,13 @@ contents:</p>
     <span class="n">created</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="s">&#39;created&#39;</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The BlogPost class must inherit from <cite>Base</cite> which is declared in <cite>microblog.model</cite>.
+<p>The <cite>BlogPost</cite> class must inherit <cite>Base</cite> which is declared in <cite>microblog.model</cite>.
 For details see
 <a class="reference external" href="http://docs.sqlalchemy.org/en/rel_0_9/orm/tutorial.html#declare-a-mapping">Declare a Mapping</a></p>
 </div>
 <div class="section" id="read-blogposts">
 <h2>Read Blogposts<a class="headerlink" href="#read-blogposts" title="Permalink to this headline">¶</a></h2>
-<p>Modify the <cite>list</cite> method of the service, so it returns all the blogposts:</p>
+<p>Modify the <cite>list</cite> method of the service, so it returns all the blogpost entries:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&quot;GET&quot;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return all blogposts</span>
@@ -175,17 +175,17 @@ For details see
 </div>
 <div class="section" id="query">
 <h3>Query<a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h3>
-<p>With the first statement we build the query to fetch all BlogPosts ordered by creation date.
+<p>With the first statement we build the query to fetch all <cite>blogpost</cite> entries ordered by creation date.
 <cite>query.all()</cite> returns the query result as list.</p>
 </div>
 <div class="section" id="result">
 <h3>Result<a class="headerlink" href="#result" title="Permalink to this headline">¶</a></h3>
-<p>After querying the blogposts we build a result list, which contains all the
-data of the fetched blogposts.</p>
+<p>After querying the blog posts we build a result list, which contains all the
+data of the fetched blog posts.</p>
 </div>
 <div class="section" id="run-the-application">
 <h3>Run the application<a class="headerlink" href="#run-the-application" title="Permalink to this headline">¶</a></h3>
-<p>Restart the app and request the blogpost service again:</p>
+<p>Restart the app and send a request to the <cite>blogpost</cite> service again:</p>
 <div class="highlight-python"><pre>$sh curl http://localhost:9210/blogposts
 {"data": {"blogposts": []}}</pre>
 </div>
@@ -193,7 +193,7 @@ data of the fetched blogposts.</p>
 </div>
 <div class="section" id="id1">
 <h2>Create BlogPosts<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>For creating BlogPosts add a <cite>create</cite> method to the <cite>BlogPost</cite> service:</p>
+<p>For creating a blog post add a <cite>create</cite> method to the <cite>BlogPost</cite> service:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">)</span>
 <span class="nd">@refresher</span>
 <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
@@ -216,18 +216,20 @@ data of the fetched blogposts.</p>
 <div class="section" id="decorators">
 <h3>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h3>
 <p>The create method has two decorators. As in the list method the
-<cite>rpcmethod_route</cite> decorator defines that the create method should be used
+<cite>rpcmethod_route</cite> decorator declares that the create method should be used
 if a POST request is performed on the service.</p>
-<p>If a new model is created and a query is performed immediately after the new
-model is created the new model will not appear in the query result. This is because crate stores the model in an internal transaction buffer which is not used for queries.
-The <cite>refresher</cite> decorator defines that crate should be refreshed after executing
-the method. So all operations get performed since the last refresh and the model
-will appear in query results.</p>
+<p>If a new model is created and a query is performed immediately
+afterwards, the new model will not appear in the query result. This is
+because crate stores the model in an internal transaction buffer which
+is not used for queries. The <cite>refresher</cite> decorator declares that crate
+should be refreshed after executing the method. So all operations
+since the last refresh get performed and the model will appear in the
+query results.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Crate automatically refreshes all indices periodically, but if you modify
 or create any data we recommend to add the <cite>refresher</cite> decorator.
-Else you may get outdated data if you query the modfied data before the next
+Else you may get outdated data if you query the modified data before the next
 refresh is scheduled.
 If you want to query the created data within the same method you can
 refresh crate with the <cite>refresh_indices</cite> function, declared in <cite>microblog.model</cite></p>
@@ -253,26 +255,26 @@ ways to pass this parameter.</p>
 and set datetime.now as the <cite>created</cite> value.
 Because we don&#8217;t have any user handling yet, we temporary use <cite>anonym</cite> as
 creator name.</p>
-<p>If a new model instance, like the Blogpost, is created it is not automatically
+<p>If a new model instance, like the <cite>Blogpost</cite>, is created it is not automatically
 assigned to the database.
 This must be done using the DBSession.add method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">DBSession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">blogpost</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>After this the BlogPost is not stored in the database but is recognized by
+<p>After this the <cite>Blogpost</cite> object is not stored in the database, but is recognized by
 SQLAlchemy as an object which needs to be stored.</p>
 <p>To store the model a flush operation must be performed on the DBSession.
-A flush will perform all pending database operations with the result that the
+A flush will perform all pending database operations, with the result that the
 objects are written to the database:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">DBSession</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Usually there is no need to do this manually because SQLAlchemy and the
 transaction manager keeps track of this.
-But the id of a model is only created when the model is written to the
-database, so we perform the flush manually, because we want to return the
+However, the id of a model is only created when the model is written to the
+database. We perform the flush manually in order to be able to return the
 id of the created model.</p>
-<p>Finally, you have a working API where you can add and read blogPosts:</p>
+<p>Finally, you have a working API where you can add and read blog posts:</p>
 <div class="highlight-python"><pre>$sh curl -XPOST localhost:9210/blogposts -d '{"text":"This is my First Blogpost"}' -H "Content-Type: application/json"
 {"id": "..."}
 
@@ -303,8 +305,8 @@ $sh curl localhost:9210/blogposts
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Create Blogposts</a><ul>
-<li><a class="reference internal" href="#blogpost-table">blogpost table</a></li>
-<li><a class="reference internal" href="#blogpost-sql-alchemy-model">BlogPost SQL Alchemy model</a></li>
+<li><a class="reference internal" href="#table-blogpost">Table blogpost</a></li>
+<li><a class="reference internal" href="#blogpost-sql-alchemy-model">BlogPost SQL Alchemy Model</a></li>
 <li><a class="reference internal" href="#read-blogposts">Read Blogposts</a><ul>
 <li><a class="reference internal" href="#query">Query</a></li>
 <li><a class="reference internal" href="#result">Result</a></li>

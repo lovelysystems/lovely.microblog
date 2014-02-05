@@ -59,11 +59,11 @@
             
   <div class="section" id="use-the-api-within-an-ios-application">
 <h1>Use the API within an iOS application<a class="headerlink" href="#use-the-api-within-an-ios-application" title="Permalink to this headline">¶</a></h1>
-<p>Previously we build a working backend for our microblogging application.
+<p>Previously we built a working backend for our microblogging application.
 It&#8217;s time to create an iOS application which uses the API.</p>
 <div class="section" id="create-the-application">
 <h2>Create the Application<a class="headerlink" href="#create-the-application" title="Permalink to this headline">¶</a></h2>
-<p>Start XCode and create a new Project. Choose the &#8220;Empty Application&#8221; template
+<p>Start XCode and create a new project. Choose the &#8220;Empty Application&#8221; template
 and name the application <cite>microblog</cite>.</p>
 <p>For interacting with the API we will use <a class="reference external" href="http://restkit.org">RestKit</a>.
 For the sake of convenience we will use
@@ -83,7 +83,7 @@ link_with 'microblog'</pre>
 <div class="section" id="the-timelineviewcontroller">
 <h2>The TimelineViewController<a class="headerlink" href="#the-timelineviewcontroller" title="Permalink to this headline">¶</a></h2>
 <p>We want to present the created blogposts in a UITableView.</p>
-<p>Create a Controller named <cite>TimelineViewController</cite> which inherits from
+<p>Create a controller named <cite>TimelineViewController</cite> which inherits from
 UITableViewController.
 This is what the controller looks like:</p>
 <p>TimelineViewController.h:</p>
@@ -183,14 +183,14 @@ Create a new class which inherits from NSObject, named BlogPost.</p>
 </div>
 <div class="section" id="blogpost-interface">
 <h3>BlogPost interface<a class="headerlink" href="#blogpost-interface" title="Permalink to this headline">¶</a></h3>
-<p>The interface defines all the properties a blogPost have. Because <cite>id</cite> is a
-reserved keyword we name it blogPostId here.</p>
+<p>The interface defines all the properties a blogPost has. Because <cite>id</cite> is a
+reserved keyword we name it <cite>blogPostId</cite> here.</p>
 </div>
 <div class="section" id="blogpost-implementation">
 <h3>BlogPost implementation<a class="headerlink" href="#blogpost-implementation" title="Permalink to this headline">¶</a></h3>
 <p>We implement the two methods declared in the interface.</p>
 <p>The <cite>mapping</cite> defines how RestKit should map the JSON data returned from the
-API. For Details about Mapping see:
+API. For details about mapping see:
 <a class="reference external" href="https://github.com/RestKit/RestKit/wiki/Object-mapping">Object Mapping</a></p>
 <p>The <cite>formattedDate</cite> method returns a string representation of the <cite>created</cite>
 property. Later we will use that for the view representation of the posts.</p>
@@ -217,13 +217,13 @@ property. Later we will use that for the view representation of the posts.</p>
     [RKObjectManager setSharedManager:manager];
 }</pre>
 </div>
-<p>Within the first four lines we setup a RKObjectManager with the base url
-of the backend. We also define that the manager sends json and interprets
+<p>Within the first four lines we setup an RKObjectManager with the base url
+of the backend. We also ensure that the manager sends json and interprets
 the response data as json.</p>
 <p>The ResponseDescriptor defines that the <cite>/blogposts</cite> endpoint should return
 a 200 OK status when a GET request gets performed. The returned json contains
-a data object with a blogposts list (KeyPath: data.blogposts). Every object in
-this list should be deserialized as <cite>BlogPost</cite> object using the
+a data object with a <cite>blogposts</cite> list (KeyPath: data.blogposts). Every object in
+this list should be deserialized as a <cite>BlogPost</cite> object using the
 [BlogPost mapping] we defined earlier.</p>
 <p>Of course you have to call the <cite>setUpRestKit</cite> method at app launch:</p>
 <div class="highlight-python"><pre>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -300,7 +300,7 @@ this list should be deserialized as <cite>BlogPost</cite> object using the
 <h3>Refresh<a class="headerlink" href="#refresh" title="Permalink to this headline">¶</a></h3>
 <p>Within the refresh method we use RestKit to fetch all objects at <cite>/blogposts</cite>.
 Because RestKit is configured to map the results of <cite>/blogposts</cite> as BlogPost
-models, we just have to assign the mapped results to <cite>self.blogPosts</cite> and to
+models, we just have to assign the mapped results to <cite>self.blogPosts</cite> and
 reload the <cite>TableView</cite>.</p>
 <p>If you start the backend and the ios app, you should see the created blogposts.</p>
 <blockquote>
@@ -321,7 +321,7 @@ the date and creator of the blogpost, we create our own <cite>BlogPostTableViewC
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">You don&#8217;t have to create the view programmatically, if you prefer
-to use Inteface Builder.</p>
+to use Interface Builder.</p>
 </div>
 <p>After adding them to the project, you have to update the <cite>cellForRowAtindexPath</cite>
 method:</p>
@@ -361,12 +361,12 @@ which calls the refresh method:</p>
                   forControlEvents:UIControlEventValueChanged];
 }</pre>
 </div>
-<p>It&#8217;s also necessary to end refreshing after the data is loaded. So add the the
+<p>It&#8217;s also necessary to end refreshing after the data is loaded. To do this add the
 following line to the <cite>success</cite> and <cite>failure</cite> blocks located in the refresh
 method:</p>
 <div class="highlight-python"><pre>[self.refreshControl endRefreshing];</pre>
 </div>
-<p>So the success block looks like:</p>
+<p>The success block now looks like:</p>
 <div class="highlight-python"><pre>success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
     self.blogPosts = [mappingResult array];
     [self.tableView reloadData];

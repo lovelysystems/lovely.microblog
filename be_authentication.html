@@ -61,25 +61,25 @@
 <h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
 <p>Our application currently allows anyone with access to the server to view and create blogposts.
 We&#8217;ll change that to allow only registered users to create blogposts.</p>
-<p>So we need a service to create new users and we have to implement access control.</p>
+<p>So we need a service to create new users, and we have to implement access control.</p>
 <p>As in <cite>Create Blogposts</cite> we will:</p>
 <blockquote>
 <div><ul class="simple">
 <li>create a database table</li>
 <li>create a SQL Alchemy model</li>
 <li>implement a user service</li>
-<li>restrict the create blogpost endpoint to registered users</li>
+<li>restrict the &#8220;create blogpost&#8221; endpoint to registered users</li>
 </ul>
 </div></blockquote>
-<div class="section" id="users-table">
-<h2>users table<a class="headerlink" href="#users-table" title="Permalink to this headline">¶</a></h2>
-<p>We want to create a very basic user with these columns:</p>
+<div class="section" id="table-users">
+<h2>Table users<a class="headerlink" href="#table-users" title="Permalink to this headline">¶</a></h2>
+<p>We want to create a very basic user table with these columns:</p>
 <div class="highlight-python"><pre>- id: primary key
 - name: username
 - password: the users password</pre>
 </div>
-<p>Open the file <cite>&lt;project-dir&gt;/etc/crate_setup.sql</cite> and add the following sql
-expression:</p>
+<p>Open the file <cite>&lt;project-dir&gt;/etc/crate_setup.sql</cite> and add the following SQL
+statement:</p>
 <div class="highlight-python"><pre>create table users (id string primary key, name string, password string)</pre>
 </div>
 <p>Add the following line to the <cite>create_cleanup.sql</cite> file:</p>
@@ -90,14 +90,14 @@ expression:</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">you might get an error because the <cite>blogpost</cite> table is already created. This
+<p class="last">You might get an error message because the <cite>blogpost</cite> table is already created. This
 error can be ignored.</p>
 </div>
 </div>
-<div class="section" id="user-sql-alchemy-model">
-<h2>User SQL Alchemy model<a class="headerlink" href="#user-sql-alchemy-model" title="Permalink to this headline">¶</a></h2>
-<p>Create a new <cite>user</cite> module as we created the <cite>blogpost</cite> module
-before:</p>
+<div class="section" id="sql-alchemy-user-model">
+<h2>SQL Alchemy User Model<a class="headerlink" href="#sql-alchemy-user-model" title="Permalink to this headline">¶</a></h2>
+<p>Create a new <cite>user</cite> module similar to the <cite>blogpost</cite> module
+we created before:</p>
 <div class="highlight-python"><pre>$sh mkdir user
 $sh touch user/__init__.py</pre>
 </div>
@@ -124,8 +124,8 @@ $sh touch user/__init__.py</pre>
 </div>
 <div class="section" id="enabling-authentication-policy">
 <h2>Enabling Authentication Policy<a class="headerlink" href="#enabling-authentication-policy" title="Permalink to this headline">¶</a></h2>
-<p>By default, Pyramid enables no authentication policy. All views are accessible
-by completely anonymous users. In order to begin protecting views from execution
+<p>By default, Pyramid does not enable any authentication policy. All views are accessible
+by anonymous users. In order to begin protecting views from execution
 based on security settings, you need to enable an authentication policy.</p>
 <p>To do that we have to change the instantiation of the Configurator
 in <cite>microblog.server.app_factory</cite>:</p>
@@ -232,21 +232,21 @@ in <cite>microblog.server.app_factory</cite>:</p>
 </div>
 <div class="section" id="the-list-method">
 <h3>The list method<a class="headerlink" href="#the-list-method" title="Permalink to this headline">¶</a></h3>
-<p>As the list method in the blogposts service we fetch all users and
+<p>In the list method in the blogposts service we fetch all users and
 build a result list which contains the usernames.</p>
-<p>Because we don&#8217;t want strangers to see the user list we require the
-<cite>Authenticated</cite> permission. For this we use the <cite>rpcmethod_view</cite> decorator.
-While the <cite>rpcmethod_route</cite> decorator decorates the pyramid route of the
-endpoint the view decorator decorates the view, permission is view specific.</p>
-<p>It&#8217;s also possible to restrict the whole service:</p>
+<p>Sometimes it&#8217;s required to pass arguments to the view. For this case use the
+decorator <cite>rpcmethod_view</cite>.
+Because we don&#8217;t want strangers to see the user list we use the <cite>rpcmethod_view</cite>
+decorator to pass the required permission to the view.</p>
+<p>It&#8217;s also possible to restrict access to the whole service:</p>
 <div class="highlight-python"><pre>@RestService('users', permission=security.Authenticated)</pre>
 </div>
-<p>We shouldn&#8217;t do that, because register and login must be accessible for every
+<p>We shouldn&#8217;t do that, because register and login must be accessible for any
 user.</p>
 </div>
 <div class="section" id="the-register-method">
 <h3>The register method<a class="headerlink" href="#the-register-method" title="Permalink to this headline">¶</a></h3>
-<p>Like in the blogposts service we create a new user here and add it to the
+<p>Like we did in the blogposts service we create a new user here and add it to the
 DBSession. We don&#8217;t have to flush the DBSession manually because this time
 we don&#8217;t want to return the users id in the response.</p>
 <p>We pass the parameter <cite>route_suffix</cite> to the <cite>rpcmmethod_route</cite> decorator so the
@@ -256,13 +256,13 @@ register uri is <cite>/users/register</cite>.</p>
 <h3>The login method<a class="headerlink" href="#the-login-method" title="Permalink to this headline">¶</a></h3>
 <p>The <cite>login</cite> method tries to query a user with the given name and the hashed password.
 If such an user exists <cite>security.remember</cite> is called and the return header
-which contains the authentication cookie is added to the response header.</p>
+that contains the authentication cookie is added to the response header.</p>
 <p>If the user is not found we change the response status code to 401 UNAUTHORIZED
 and return an error status.</p>
 </div>
 <div class="section" id="includeme">
 <h3>includeme<a class="headerlink" href="#includeme" title="Permalink to this headline">¶</a></h3>
-<p>As in the blogpost service we define the route in the includeme function.
+<p>As in the blogpost service we define the route in the <cite>includeme</cite> function.
 We also pass the <cite>AuthACLFactory</cite> we created earlier, to determine the users
 permission.</p>
 </div>
@@ -351,8 +351,8 @@ $sh curl -XGET localhost:9210/blogposts
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Authentication</a><ul>
-<li><a class="reference internal" href="#users-table">users table</a></li>
-<li><a class="reference internal" href="#user-sql-alchemy-model">User SQL Alchemy model</a></li>
+<li><a class="reference internal" href="#table-users">Table users</a></li>
+<li><a class="reference internal" href="#sql-alchemy-user-model">SQL Alchemy User Model</a></li>
 <li><a class="reference internal" href="#enabling-authentication-policy">Enabling Authentication Policy</a></li>
 <li><a class="reference internal" href="#the-user-service">The user service</a><ul>
 <li><a class="reference internal" href="#the-list-method">The list method</a></li>

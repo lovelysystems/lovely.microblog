@@ -5,26 +5,26 @@ Authentication
 Our application currently allows anyone with access to the server to view and create blogposts.
 We'll change that to allow only registered users to create blogposts.
 
-So we need a service to create new users and we have to implement access control.
+So we need a service to create new users, and we have to implement access control.
 
 As in `Create Blogposts` we will:
 
     - create a database table
     - create a SQL Alchemy model
     - implement a user service
-    - restrict the create blogpost endpoint to registered users
+    - restrict the "create blogpost" endpoint to registered users
 
-users table
+Table users
 ===========
 
-We want to create a very basic user with these columns::
+We want to create a very basic user table with these columns::
 
     - id: primary key
     - name: username
     - password: the users password
 
-Open the file `<project-dir>/etc/crate_setup.sql` and add the following sql
-expression::
+Open the file `<project-dir>/etc/crate_setup.sql` and add the following SQL
+statement::
 
     create table users (id string primary key, name string, password string)
 
@@ -38,14 +38,14 @@ Ensure that crate is running and then run crate_setup::
 
 .. note::
 
-   you might get an error because the `blogpost` table is already created. This
+   You might get an error message because the `blogpost` table is already created. This
    error can be ignored.
 
-User SQL Alchemy model
+SQL Alchemy User Model
 ======================
 
-Create a new `user` module as we created the `blogpost` module
-before::
+Create a new `user` module similar to the `blogpost` module
+we created before::
 
     $sh mkdir user
     $sh touch user/__init__.py
@@ -73,8 +73,8 @@ Also move the `genuuid` function from `microblog/blogpost/model.py` to
 Enabling Authentication Policy
 ==============================
 
-By default, Pyramid enables no authentication policy. All views are accessible
-by completely anonymous users. In order to begin protecting views from execution
+By default, Pyramid does not enable any authentication policy. All views are accessible
+by anonymous users. In order to begin protecting views from execution
 based on security settings, you need to enable an authentication policy.
 
 To do that we have to change the instantiation of the Configurator
@@ -185,25 +185,25 @@ Create the file `user/service.py` with the following contents::
 The list method
 ---------------
 
-As the list method in the blogposts service we fetch all users and
+In the list method in the blogposts service we fetch all users and
 build a result list which contains the usernames.
 
-Because we don't want strangers to see the user list we require the
-`Authenticated` permission. For this we use the `rpcmethod_view` decorator.
-While the `rpcmethod_route` decorator decorates the pyramid route of the
-endpoint the view decorator decorates the view, permission is view specific.
+Sometimes it's required to pass arguments to the view. For this case use the
+decorator `rpcmethod_view`.
+Because we don't want strangers to see the user list we use the `rpcmethod_view`
+decorator to pass the required permission to the view.
 
-It's also possible to restrict the whole service::
+It's also possible to restrict access to the whole service::
 
     @RestService('users', permission=security.Authenticated)
 
-We shouldn't do that, because register and login must be accessible for every
+We shouldn't do that, because register and login must be accessible for any
 user.
 
 The register method
 -------------------
 
-Like in the blogposts service we create a new user here and add it to the
+Like we did in the blogposts service we create a new user here and add it to the
 DBSession. We don't have to flush the DBSession manually because this time
 we don't want to return the users id in the response.
 
@@ -215,7 +215,7 @@ The login method
 
 The `login` method tries to query a user with the given name and the hashed password.
 If such an user exists `security.remember` is called and the return header
-which contains the authentication cookie is added to the response header.
+that contains the authentication cookie is added to the response header.
 
 If the user is not found we change the response status code to 401 UNAUTHORIZED
 and return an error status.
@@ -223,7 +223,7 @@ and return an error status.
 includeme
 ---------
 
-As in the blogpost service we define the route in the includeme function.
+As in the blogpost service we define the route in the `includeme` function.
 We also pass the `AuthACLFactory` we created earlier, to determine the users
 permission.
 

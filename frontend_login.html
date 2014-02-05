@@ -55,14 +55,14 @@
             
   <div class="section" id="login-within-the-ios-application">
 <h1>Login within the iOS application<a class="headerlink" href="#login-within-the-ios-application" title="Permalink to this headline">¶</a></h1>
-<p>Because creation of blogposts needs authentication, the user of the ios app
+<p>Because creation of blogposts needs authentication, the user of the iOS app
 should be able to login.</p>
 <p>If the creation of a blogpost fails due authentication issues we will present
 a LoginViewController.</p>
 <div class="section" id="the-user-model">
 <h2>The User model<a class="headerlink" href="#the-user-model" title="Permalink to this headline">¶</a></h2>
 <p>As well as for the blogposts we need a representation of the user model.
-Create a new class named User:</p>
+Create a new class named <cite>User</cite>:</p>
 <p>User.h:</p>
 <div class="highlight-python"><pre>#import &lt;Foundation/Foundation.h&gt;
 #import &lt;RestKit/RestKit.h&gt;
@@ -95,7 +95,7 @@ Create a new class named User:</p>
 </div>
 <div class="section" id="update-restkit-setup">
 <h2>Update RestKit Setup<a class="headerlink" href="#update-restkit-setup" title="Permalink to this headline">¶</a></h2>
-<p>For the <cite>login</cite> endpoint we create request and response descriptors as the one
+<p>For the <cite>login</cite> endpoint we create request and response descriptors like the one
 we created for the <cite>blogposts</cite> endpoint:</p>
 <div class="highlight-python"><pre>RKRequestDescriptor* loginRequest = [RKRequestDescriptor requestDescriptorWithMapping:[[User mapping] inverseMapping]
                                                                           objectClass:[User class]
@@ -110,10 +110,9 @@ RKResponseDescriptor* loginResponse = [RKResponseDescriptor responseDescriptorWi
 [manager addResponseDescriptorsFromArray:@[blogPostGetResponse, blogPostPostResponse, loginResponse]];
 [manager addRequestDescriptorsFromArray:@[blogPostPostRequest, loginRequest]];</pre>
 </div>
-<p>In contrast to the other response descriptors we use an empty mapping for the
-login response.
-The returned status code is sufficient to see if the login succeeded or not, so
-we can ignore the response body.</p>
+<p>In contrast to the other response descriptors we use an empty mapping
+for the login response. The returned status code is sufficient to see
+if the login succeeded or not, so we can ignore the response body.</p>
 </div>
 <div class="section" id="the-view">
 <h2>The View<a class="headerlink" href="#the-view" title="Permalink to this headline">¶</a></h2>
@@ -233,7 +232,7 @@ One for login and one for cancel.</p>
 is posted to <cite>/users/login</cite>.
 If everything is ok we send a message to the delegate that the login was
 successful.</p>
-<p>It&#8217;s not necessary to handle the authentication cookie because restkit does that.</p>
+<p>It&#8217;s not necessary to handle the authentication cookie because restkit does that for us.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If you want to persist the cookie you can extract them from the shared
@@ -246,9 +245,8 @@ or <a class="reference external" href="https://developer.apple.com/library/ios/d
 </div>
 <div class="section" id="present-the-login-view">
 <h2>Present the Login View<a class="headerlink" href="#present-the-login-view" title="Permalink to this headline">¶</a></h2>
-<p>If creating fails with a <cite>403 Forbidden</cite> status code we present
-the login view.
-So edit the <cite>failure</cite> block within the <cite>sendPost:</cite> method:</p>
+<p>If creating an user object fails with a <cite>403 Forbidden</cite> status code we present
+the login view. Edit the <cite>failure</cite> block within the <cite>sendPost:</cite> method:</p>
 <div class="highlight-python"><pre>failure:^(RKObjectRequestOperation *operation, NSError *error) {
         if(operation.HTTPRequestOperation.response.statusCode == 403){
             LoginViewController* loginViewController = [[LoginViewController alloc] initWithNibName:nil
