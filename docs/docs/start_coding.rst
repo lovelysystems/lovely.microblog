@@ -3,7 +3,7 @@ Start Coding
 ============
 
 As mentioned before we want to build a small blogging application, where
-users can create and read blogposts.
+users can create and read blog posts.
 
 The microblog Application
 =========================
@@ -27,16 +27,16 @@ gevent WSGIServer.
 The BlogPost Service
 ====================
 
-As first step we create a new REST-Service for reading and creating blogposts. So create a `blogpost` module inside the microblog module::
+As a first step we create a new REST-Service for reading and creating blog posts. To do this, create a `blogpost` module inside the microblog package::
 
     $sh mkdir blogpost
     $sh touch blogpost/__init__.py
 
 .. note::
 
-   It's not necessary to create a module for the blogpost. If you want you can
+   It's not mandatory to create a module for the blogpost. If you want you can
    put the service inside the server.py or every other module.
-   (We would not recommend to do that, it's like putting all the Code of an ios
+   (We would not recommend to do that, it's like putting all the Code of an iOS
    app into the `AppDelegate`)
 
 Inside the `blogpost` module, create a file named `service.py`. The contents
@@ -71,7 +71,7 @@ The second parameter is the relative url path.
 BlogPostService
 ---------------
 
-The `BlogPostService` class is the implementation of our rest service. 
+The `BlogPostService` class is the implementation of our REST service. 
 It needs an `__init__` method which takes a request object.
 
 RestService decorator
@@ -97,8 +97,8 @@ if a GET request is performed on the service.
 Include the Service
 ===================
 
-Now open the `server.py` file and include and scan the created module, so the
-`app_factory` method looks like::
+Now open the `server.py` file and include and scan the created module. Now the
+`app_factory` method look should something like this::
 
     def app_factory(global_config, **settings):
         """Setup the main application for paste
@@ -117,7 +117,7 @@ config.include
 
 `config.include(microblog.blogpost.service)` imports the created service.py
 and executes the `includeme` function. Alternatively you could declare the route
-directly in the `app_factory`. Then you should ommit the `includeme` function in
+directly in the `app_factory`. Then you should omit the `includeme` function in
 the service.py.
 
 config.scan
