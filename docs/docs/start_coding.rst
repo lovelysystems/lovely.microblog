@@ -5,6 +5,10 @@ Start Coding
 As mentioned before we want to build a small blogging application, where
 users can create and read blog posts.
 
+As webframework we use
+`lovely.pyrest <http://lovelysystems.github.io/lovely.pyrest/index.html>`_ which
+is build on top of `pyramid <http://www.pylonsproject.org/projects/pyramid/about>`_
+
 The microblog Application
 =========================
 
@@ -39,8 +43,8 @@ As a first step we create a new REST-Service for reading and creating blog posts
    (We would not recommend to do that, it's like putting all the Code of an iOS
    app into the `AppDelegate`)
 
-Inside the `blogpost` module, create a file named `service.py`. The contents
-of the file should look like::
+Inside the `blogpost` module, create a file named `service.py` and add the
+following contents::
 
     from lovely.pyrest.rest import RestService, rpcmethod_route
     
@@ -64,7 +68,7 @@ includeme
 ---------
 
 The includeme function declares the `blogposts` route. It defines that the
-BlogPostService should be called if someone requests `/blogposts`.
+BlogPostService will be called if someone requests `/blogposts`.
 The first parameter `blogposts` is just an identifier.
 The second parameter is the relative url path.
 
@@ -86,7 +90,7 @@ List function
 -------------
 
 The `list` function is a very basic function which returns an empty dictionary.
-The `rpcmethod_route` decorator defines that this method should be used
+The `rpcmethod_route` decorator defines that this method will be used
 if a GET request is performed on the service.
 
 .. note::
@@ -97,7 +101,7 @@ if a GET request is performed on the service.
 Include the Service
 ===================
 
-Now open the `server.py` file and include and scan the created module. Now the
+Now open the `server.py` file and include and scan the created module. The
 `app_factory` method should look something like this::
 
     def app_factory(global_config, **settings):
@@ -126,6 +130,7 @@ config.scan
 `config.scan(microblog.blogpost)` tells the application to import
 `microblog.blogpost` and to register the RestService internally.
 
+===================
 Run the application
 ===================
 

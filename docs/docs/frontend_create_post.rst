@@ -8,8 +8,8 @@ Now let's see how we use the API to create new blogposts.
 Update RestKit setUp
 ====================
 
-First of all define how RestKit should post `BlogPosts` and how the response
-data should be deserialized.
+First of all define how RestKit will post `BlogPosts` and how the response
+data must be deserialized.
 To do this add a response and a request descriptor for POST Requests to `/blogposts` in
 the `setUpRestKit` method, which we defined earlier in the AppDelegate::
 
@@ -201,6 +201,10 @@ Also add an `UIBarButton` to the navigationItem::
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                              action:@selector(createNewBlogPost:)];
+
+====================
+Test the application
+====================
 
 Start the app and you are able to create blogposts.
 
