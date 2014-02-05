@@ -288,6 +288,10 @@ the `create` method so the correct username gets assigned to creator::
     user = security.authenticated_userid(self.request)
     blogpost.creator = user
 
+====================
+Test the application
+====================
+
 Restart the app and create a new post::
 
     $sh curl -XPOST localhost:9210/blogposts -H 'Cookie: auth_tkt="<token>"' -d '{"text": "authenticated post"}' -H "Content-Type: application/json"

@@ -189,7 +189,7 @@ reserved keyword we name it <cite>blogPostId</cite> here.</p>
 <div class="section" id="blogpost-implementation">
 <h3>BlogPost implementation<a class="headerlink" href="#blogpost-implementation" title="Permalink to this headline">¶</a></h3>
 <p>We implement the two methods declared in the interface.</p>
-<p>The <cite>mapping</cite> defines how RestKit should map the JSON data returned from the
+<p>The <cite>mapping</cite> defines how RestKit will map the JSON data returned from the
 API. For details about mapping see:
 <a class="reference external" href="https://github.com/RestKit/RestKit/wiki/Object-mapping">Object Mapping</a></p>
 <p>The <cite>formattedDate</cite> method returns a string representation of the <cite>created</cite>
@@ -220,10 +220,10 @@ property. Later we will use that for the view representation of the posts.</p>
 <p>Within the first four lines we setup an RKObjectManager with the base url
 of the backend. We also ensure that the manager sends json and interprets
 the response data as json.</p>
-<p>The ResponseDescriptor defines that the <cite>/blogposts</cite> endpoint should return
+<p>The ResponseDescriptor defines that the <cite>/blogposts</cite> endpoint will return
 a 200 OK status when a GET request gets performed. The returned json contains
 a data object with a <cite>blogposts</cite> list (KeyPath: data.blogposts). Every object in
-this list should be deserialized as a <cite>BlogPost</cite> object using the
+this list will be deserialized as a <cite>BlogPost</cite> object using the
 [BlogPost mapping] we defined earlier.</p>
 <p>Of course you have to call the <cite>setUpRestKit</cite> method at app launch:</p>
 <div class="highlight-python"><pre>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -302,7 +302,7 @@ this list should be deserialized as a <cite>BlogPost</cite> object using the
 Because RestKit is configured to map the results of <cite>/blogposts</cite> as BlogPost
 models, we just have to assign the mapped results to <cite>self.blogPosts</cite> and
 reload the <cite>TableView</cite>.</p>
-<p>If you start the backend and the ios app, you should see the created blogposts.</p>
+<p>If you start the backend and the ios app, you will see the created blogposts.</p>
 <blockquote>
 <div><img alt="_images/ios_list_posts_1.png" src="_images/ios_list_posts_1.png" />
 </div></blockquote>

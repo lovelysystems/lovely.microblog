@@ -23,13 +23,13 @@ template which contains a working buildout configuration including:
     - scripts to setup and teardown the crate database
     - A configured `supervisord <http://supervisord.org>`_ to control the crate
       and app processes for development
-    - A script to generate a `sphinx <http://sphinx-doc.org>`_>`_ documentation
+    - A script to generate a `sphinx <http://sphinx-doc.org>`_ documentation
       for your backend
 
 Setup using the template
 ------------------------
 
-Install cookiecutter::
+Install cookiecutter with `pip <https://pypi.python.org/pypi/pip>`_::
 
     sh$ pip install https://download.lovelysystems.com/public/cookiecutter-0.7.0-conditional.tar.gz
 
@@ -63,7 +63,7 @@ change the `company_name`, `email` etc. ::
     supervisor (default is "yes")? y
     sphinx (default is "yes")? y
 
-There should be a folder called `microblog` (or your repo_name) which contains
+There will be a folder called `microblog` (or your repo_name) which contains
 several files::
 
     sh$ ls microblog
@@ -129,7 +129,9 @@ So you can make some requests::
         <title>404 Not Found</title>
     ...
 
-The supervisord script starts the app and crate in background::
+The supervisord script starts the app and crate in background. You have to cancel
+the app script first by pressing ^CTRL + C else supervisord can't start the app
+because the port is already in use::
 
     sh$ bin/supervisord
     sh$ bin/supervisorctl status
@@ -139,6 +141,20 @@ The supervisord script starts the app and crate in background::
 To stop the app or crate run::
 
     sh$ bin/supervisorctl stop app
+
+During development you have to restart the app frequently. It's more convinient
+to use the supervisor just for crate. The app script should be started in
+foreground, so you can easily restart the app. A further advantage of running
+the app in foreground is that you see the output of the app script.
+This might help finding errors.
+After starting supervisord run::
+
+    sh$ bin/supervisortctl stop app
+    sh$ bin/app
+
+To restart the app stop the script by pressing ^CTRL + C and start it again::
+
+    sh$ bin/app
 
 Non Sandboxed Development Setup
 ===============================

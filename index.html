@@ -55,14 +55,16 @@
             
   <div class="section" id="how-to-create-highly-scalable-web-backends-for-ios-devices">
 <h1>How To Create Highly Scalable Web Backends for iOS Devices<a class="headerlink" href="#how-to-create-highly-scalable-web-backends-for-ios-devices" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial, we will walk through the creation of a tiny iOs application with a highly scalable web backend using:</p>
+<p>In this tutorial, we will walk through the creation of a tiny iOs application
+with a highly scalable web backend using:</p>
 <blockquote>
 <div><ul class="simple">
 <li><a class="reference external" href="https://crate.io">Crate</a> An SQL and doc-oriented database</li>
 <li><a class="reference external" href="http://lovelysystems.github.io/lovely.pyrest/index.html">Lovely Pyrest</a> A web framework on top of <a class="reference external" href="http://www.pylonsproject.org/projects/pyramid/about">pyramid</a></li>
 </ul>
 </div></blockquote>
-<p>We will build a tiny blogging application where registered users can create posts which can be read by anyone.</p>
+<p>We will build a tiny blogging application where registered users can create
+posts which can be read by anyone.</p>
 <div class="section" id="contents">
 <h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -76,22 +78,35 @@
 <li class="toctree-l1"><a class="reference internal" href="start_coding.html">Start Coding</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="start_coding.html#run-the-application">Run the application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="create_blogposts.html">Create Blogposts</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="create_blogposts.html#test-the-application">Test the application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frontend_blogposts.html">Use the API within an iOS application</a><ul class="simple">
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frontend_create_post.html">Create new Posts in Frontend</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="frontend_create_post.html#test-the-application">Test the application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="be_authentication.html">Authentication</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="be_authentication.html#test-the-application">Test the application</a></li>
 <li class="toctree-l1"><a class="reference internal" href="frontend_login.html">Login within the iOS application</a><ul class="simple">
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="frontend_login.html#test-the-application">Test the application</a></li>
 </ul>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The target audience of this tutorial are iOS Developers which require a
+backend for an app. Therefore it&#8217;s based on OSX. Because the backend is
+based on <cite>Lovely Pyrest</cite> it runs on all popular UNIX-like systems
+such as Linux and FreeBSD. Setup and installation instructions may
+differ.</p>
 </div>
 </div>
 <div class="section" id="getting-the-source-code-from-github">
@@ -99,7 +114,7 @@
 <p>If you want the sources of the app we create in this tutorial, clone the
 <cite>lovely.microblog</cite> repository.</p>
 <p>Cloning the source code installs a copy of the repository on your computer.
-You should have git installed to do this:</p>
+You must have git installed to do this:</p>
 <div class="highlight-python"><pre>git clone git@github.com:lovelysystems/lovely.microblog.git</pre>
 </div>
 <p>The repository contains three directories:</p>

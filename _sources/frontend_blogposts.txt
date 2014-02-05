@@ -151,7 +151,7 @@ BlogPost implementation
 
 We implement the two methods declared in the interface.
 
-The `mapping` defines how RestKit should map the JSON data returned from the
+The `mapping` defines how RestKit will map the JSON data returned from the
 API. For details about mapping see:
 `Object Mapping <https://github.com/RestKit/RestKit/wiki/Object-mapping>`_
 
@@ -185,10 +185,10 @@ Within the first four lines we setup an RKObjectManager with the base url
 of the backend. We also ensure that the manager sends json and interprets
 the response data as json.
 
-The ResponseDescriptor defines that the `/blogposts` endpoint should return
+The ResponseDescriptor defines that the `/blogposts` endpoint will return
 a 200 OK status when a GET request gets performed. The returned json contains
 a data object with a `blogposts` list (KeyPath: data.blogposts). Every object in
-this list should be deserialized as a `BlogPost` object using the
+this list will be deserialized as a `BlogPost` object using the
 [BlogPost mapping] we defined earlier.
 
 Of course you have to call the `setUpRestKit` method at app launch::
@@ -273,7 +273,7 @@ Because RestKit is configured to map the results of `/blogposts` as BlogPost
 models, we just have to assign the mapped results to `self.blogPosts` and 
 reload the `TableView`.
 
-If you start the backend and the ios app, you should see the created blogposts.
+If you start the backend and the ios app, you will see the created blogposts.
 
     .. image:: images/ios_list_posts_1.png
 

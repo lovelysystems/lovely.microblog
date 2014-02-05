@@ -46,4 +46,7 @@ Source the shell rc file and check the java version::
     $ source ~/.zshrc
 
     $ java -version
+    java version "1.7.0_..."
 
+If the printed version is greater than or equal to 1.7.0 you have installed
+java sucsessfully.

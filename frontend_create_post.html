@@ -63,8 +63,8 @@
 Now let&#8217;s see how we use the API to create new blogposts.</p>
 <div class="section" id="update-restkit-setup">
 <h2>Update RestKit setUp<a class="headerlink" href="#update-restkit-setup" title="Permalink to this headline">¶</a></h2>
-<p>First of all define how RestKit should post <cite>BlogPosts</cite> and how the response
-data should be deserialized.
+<p>First of all define how RestKit will post <cite>BlogPosts</cite> and how the response
+data must be deserialized.
 To do this add a response and a request descriptor for POST Requests to <cite>/blogposts</cite> in
 the <cite>setUpRestKit</cite> method, which we defined earlier in the AppDelegate:</p>
 <div class="highlight-python"><pre>RKResponseDescriptor* blogPostPostResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
@@ -243,11 +243,14 @@ to present and dismiss the controller:</p>
                                                                          target:self
                                                                          action:@selector(createNewBlogPost:)];</pre>
 </div>
+</div>
+</div>
+<div class="section" id="test-the-application">
+<h1>Test the application<a class="headerlink" href="#test-the-application" title="Permalink to this headline">¶</a></h1>
 <p>Start the app and you are able to create blogposts.</p>
 <blockquote>
 <div><img alt="_images/ios_create_blogpost.png" src="_images/ios_create_blogpost.png" />
 </div></blockquote>
-</div>
 </div>
 
 
@@ -275,6 +278,7 @@ to present and dismiss the controller:</p>
 <li><a class="reference internal" href="#present-the-viewcontroller">Present the ViewController</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
 </ul>
 
   <h4>Previous topic</h4>

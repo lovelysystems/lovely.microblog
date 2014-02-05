@@ -77,14 +77,14 @@ template which contains a working buildout configuration including:</p>
 <li>scripts to setup and teardown the crate database</li>
 <li>A configured <a class="reference external" href="http://supervisord.org">supervisord</a> to control the crate
 and app processes for development</li>
-<li>A script to generate a <a class="reference external" href="http://sphinx-doc.org">sphinx</a>&gt;`_ documentation
+<li>A script to generate a <a class="reference external" href="http://sphinx-doc.org">sphinx</a> documentation
 for your backend</li>
 </ul>
 </div></blockquote>
 </div>
 <div class="section" id="setup-using-the-template">
 <h3>Setup using the template<a class="headerlink" href="#setup-using-the-template" title="Permalink to this headline">¶</a></h3>
-<p>Install cookiecutter:</p>
+<p>Install cookiecutter with <a class="reference external" href="https://pypi.python.org/pypi/pip">pip</a>:</p>
 <div class="highlight-python"><pre>sh$ pip install https://download.lovelysystems.com/public/cookiecutter-0.7.0-conditional.tar.gz</pre>
 </div>
 <p>Create the microblog project:</p>
@@ -115,7 +115,7 @@ crate (default is "yes")? y
 supervisor (default is "yes")? y
 sphinx (default is "yes")? y</pre>
 </div>
-<p>There should be a folder called <cite>microblog</cite> (or your repo_name) which contains
+<p>There will be a folder called <cite>microblog</cite> (or your repo_name) which contains
 several files:</p>
 <div class="highlight-python"><pre>sh$ ls microblog
 CHANGES.rst
@@ -174,7 +174,9 @@ supervisord</pre>
     &lt;title&gt;404 Not Found&lt;/title&gt;
 ...</pre>
 </div>
-<p>The supervisord script starts the app and crate in background:</p>
+<p>The supervisord script starts the app and crate in background. You have to cancel
+the app script first by pressing ^CTRL + C else supervisord can&#8217;t start the app
+because the port is already in use:</p>
 <div class="highlight-python"><pre>sh$ bin/supervisord
 sh$ bin/supervisorctl status
 app                              RUNNING ...
@@ -182,6 +184,18 @@ crate                            RUNNING ...</pre>
 </div>
 <p>To stop the app or crate run:</p>
 <div class="highlight-python"><pre>sh$ bin/supervisorctl stop app</pre>
+</div>
+<p>During development you have to restart the app frequently. It&#8217;s more convinient
+to use the supervisor just for crate. The app script should be started in
+foreground, so you can easily restart the app. A further advantage of running
+the app in foreground is that you see the output of the app script.
+This might help finding errors.
+After starting supervisord run:</p>
+<div class="highlight-python"><pre>sh$ bin/supervisortctl stop app
+sh$ bin/app</pre>
+</div>
+<p>To restart the app stop the script by pressing ^CTRL + C and start it again:</p>
+<div class="highlight-python"><pre>sh$ bin/app</pre>
 </div>
 </div>
 </div>

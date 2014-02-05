@@ -61,6 +61,9 @@
 <h1>Start Coding<a class="headerlink" href="#start-coding" title="Permalink to this headline">¶</a></h1>
 <p>As mentioned before we want to build a small blogging application, where
 users can create and read blog posts.</p>
+<p>As webframework we use
+<a class="reference external" href="http://lovelysystems.github.io/lovely.pyrest/index.html">lovely.pyrest</a> which
+is build on top of <a class="reference external" href="http://www.pylonsproject.org/projects/pyramid/about">pyramid</a></p>
 <div class="section" id="the-microblog-application">
 <h2>The microblog Application<a class="headerlink" href="#the-microblog-application" title="Permalink to this headline">¶</a></h2>
 <p>The project directory contains a folder named <cite>microblog</cite>.
@@ -89,8 +92,8 @@ put the service inside the server.py or every other module.
 (We would not recommend to do that, it&#8217;s like putting all the Code of an iOS
 app into the <cite>AppDelegate</cite>)</p>
 </div>
-<p>Inside the <cite>blogpost</cite> module, create a file named <cite>service.py</cite>. The contents
-of the file should look like:</p>
+<p>Inside the <cite>blogpost</cite> module, create a file named <cite>service.py</cite> and add the
+following contents:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lovely.pyrest.rest</span> <span class="kn">import</span> <span class="n">RestService</span><span class="p">,</span> <span class="n">rpcmethod_route</span>
 
 
@@ -113,7 +116,7 @@ of the file should look like:</p>
 <div class="section" id="includeme">
 <h3>includeme<a class="headerlink" href="#includeme" title="Permalink to this headline">¶</a></h3>
 <p>The includeme function declares the <cite>blogposts</cite> route. It defines that the
-BlogPostService should be called if someone requests <cite>/blogposts</cite>.
+BlogPostService will be called if someone requests <cite>/blogposts</cite>.
 The first parameter <cite>blogposts</cite> is just an identifier.
 The second parameter is the relative url path.</p>
 </div>
@@ -132,7 +135,7 @@ identifier as the blogposts route.</p>
 <div class="section" id="list-function">
 <h3>List function<a class="headerlink" href="#list-function" title="Permalink to this headline">¶</a></h3>
 <p>The <cite>list</cite> function is a very basic function which returns an empty dictionary.
-The <cite>rpcmethod_route</cite> decorator defines that this method should be used
+The <cite>rpcmethod_route</cite> decorator defines that this method will be used
 if a GET request is performed on the service.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -143,7 +146,7 @@ HTTP Method. So you could ommit it, in this case.</p>
 </div>
 <div class="section" id="include-the-service">
 <h2>Include the Service<a class="headerlink" href="#include-the-service" title="Permalink to this headline">¶</a></h2>
-<p>Now open the <cite>server.py</cite> file and include and scan the created module. Now the
+<p>Now open the <cite>server.py</cite> file and include and scan the created module. The
 <cite>app_factory</cite> method should look something like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">app_factory</span><span class="p">(</span><span class="n">global_config</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Setup the main application for paste</span>
@@ -171,8 +174,9 @@ the service.py.</p>
 <cite>microblog.blogpost</cite> and to register the RestService internally.</p>
 </div>
 </div>
+</div>
 <div class="section" id="run-the-application">
-<h2>Run the application<a class="headerlink" href="#run-the-application" title="Permalink to this headline">¶</a></h2>
+<h1>Run the application<a class="headerlink" href="#run-the-application" title="Permalink to this headline">¶</a></h1>
 <p>After restarting the app, you can request the blogpost service using your browser
 or curl:</p>
 <div class="highlight-python"><pre>$sh curl http://localhost:9210/blogposts
@@ -180,7 +184,6 @@ or curl:</p>
 </div>
 <p>The response body contains the empty dictionary, which is returned by the
 <cite>list</cite> function.</p>
-</div>
 </div>
 
 
@@ -205,9 +208,9 @@ or curl:</p>
 <li><a class="reference internal" href="#config-scan">config.scan</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#run-the-application">Run the application</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#run-the-application">Run the application</a></li>
 </ul>
 
   <h4>Previous topic</h4>

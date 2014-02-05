@@ -216,13 +216,13 @@ data of the fetched blog posts.</p>
 <div class="section" id="decorators">
 <h3>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h3>
 <p>The create method has two decorators. As in the list method the
-<cite>rpcmethod_route</cite> decorator declares that the create method should be used
+<cite>rpcmethod_route</cite> decorator declares that the create method will be used
 if a POST request is performed on the service.</p>
 <p>If a new model is created and a query is performed immediately
 afterwards, the new model will not appear in the query result. This is
 because crate stores the model in an internal transaction buffer which
 is not used for queries. The <cite>refresher</cite> decorator declares that crate
-should be refreshed after executing the method. So all operations
+will be refreshed after executing the method. So all operations
 since the last refresh get performed and the model will appear in the
 query results.</p>
 <div class="admonition note">
@@ -274,6 +274,11 @@ transaction manager keeps track of this.
 However, the id of a model is only created when the model is written to the
 database. We perform the flush manually in order to be able to return the
 id of the created model.</p>
+</div>
+</div>
+</div>
+<div class="section" id="test-the-application">
+<h1>Test the application<a class="headerlink" href="#test-the-application" title="Permalink to this headline">¶</a></h1>
 <p>Finally, you have a working API where you can add and read blog posts:</p>
 <div class="highlight-python"><pre>$sh curl -XPOST localhost:9210/blogposts -d '{"text":"This is my First Blogpost"}' -H "Content-Type: application/json"
 {"id": "..."}
@@ -291,8 +296,6 @@ $sh curl localhost:9210/blogposts
         ]
     }
 }</pre>
-</div>
-</div>
 </div>
 </div>
 
@@ -321,6 +324,7 @@ $sh curl localhost:9210/blogposts
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
 </ul>
 
   <h4>Previous topic</h4>
