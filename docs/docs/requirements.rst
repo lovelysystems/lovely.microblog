@@ -19,6 +19,10 @@ The following additional packages need to be installed::
 
     brew install libevent
 
+With macports::
+
+    sudo port install libevent
+
 Java 7
 ======
 

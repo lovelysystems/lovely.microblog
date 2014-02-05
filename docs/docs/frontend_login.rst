@@ -2,7 +2,7 @@
 Login within the iOS application
 ================================
 
-Because creation of blogposts needs authentication, the user of the ios app
+Because creation of blogposts needs authentication, the user of the iOS app
 should be able to login.
 
 If the creation of a blogpost fails due authentication issues we will present
@@ -12,7 +12,7 @@ The User model
 ==============
 
 As well as for the blogposts we need a representation of the user model.
-Create a new class named User:
+Create a new class named `User`:
 
 User.h::
 
@@ -48,7 +48,7 @@ User.m::
 Update RestKit Setup
 ====================
 
-For the `login` endpoint we create request and response descriptors as the one
+For the `login` endpoint we create request and response descriptors like the one
 we created for the `blogposts` endpoint::
 
     RKRequestDescriptor* loginRequest = [RKRequestDescriptor requestDescriptorWithMapping:[[User mapping] inverseMapping]
@@ -64,10 +64,9 @@ we created for the `blogposts` endpoint::
     [manager addResponseDescriptorsFromArray:@[blogPostGetResponse, blogPostPostResponse, loginResponse]];
     [manager addRequestDescriptorsFromArray:@[blogPostPostRequest, loginRequest]];
 
-In contrast to the other response descriptors we use an empty mapping for the
-login response.
-The returned status code is sufficient to see if the login succeeded or not, so
-we can ignore the response body.
+In contrast to the other response descriptors we use an empty mapping
+for the login response. The returned status code is sufficient to see
+if the login succeeded or not, so we can ignore the response body.
 
 The View
 ========
@@ -193,7 +192,7 @@ is posted to `/users/login`.
 If everything is ok we send a message to the delegate that the login was
 successful.
 
-It's not necessary to handle the authentication cookie because restkit does that.
+It's not necessary to handle the authentication cookie because restkit does that for us. 
 
 .. note::
 
@@ -207,9 +206,8 @@ Within the `failure` block we show an appropriate error message.
 Present the Login View
 ======================
 
-If creating fails with a `403 Forbidden` status code we present
-the login view.
-So edit the `failure` block within the `sendPost:` method::
+If creating an user object fails with a `403 Forbidden` status code we present
+the login view. Edit the `failure` block within the `sendPost:` method::
 
     failure:^(RKObjectRequestOperation *operation, NSError *error) {
             if(operation.HTTPRequestOperation.response.statusCode == 403){

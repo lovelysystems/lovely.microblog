@@ -1,12 +1,12 @@
-=====================================================
-How to Create high scalable web backends for iOS-Devs
-=====================================================
+==========================================================
+How To Create Highly Scalable Web Backends for iOS Devices
+==========================================================
 
 In this tutorial, we will walk through the creation of a tiny iOs application with
-a high scalable webbackend using:
+a highly scalable web backend using:
 
-   - `Crate <https://crate.io>`_ An SQL and Doc-oriented databse
-   - `Lovely Pyrest <http://lovelysystems.github.io/lovely.pyrest/index.html>`_ A Web-Framework on top of `pyramid <http://www.pylonsproject.org/projects/pyramid/about>`_
+   - `Crate <https://crate.io>`_ An SQL and doc-oriented database
+   - `Lovely Pyrest <http://lovelysystems.github.io/lovely.pyrest/index.html>`_ A web framework on top of `pyramid <http://www.pylonsproject.org/projects/pyramid/about>`_
 
 Contents:
 ---------

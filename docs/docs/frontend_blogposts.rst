@@ -2,13 +2,13 @@
 Use the API within an iOS application
 =====================================
 
-Previously we build a working backend for our microblogging application.
+Previously we built a working backend for our microblogging application.
 It's time to create an iOS application which uses the API.
 
 Create the Application
 ======================
 
-Start XCode and create a new Project. Choose the "Empty Application" template
+Start XCode and create a new project. Choose the "Empty Application" template
 and name the application `microblog`.
 
 For interacting with the API we will use `RestKit <http://restkit.org>`_.
@@ -34,7 +34,7 @@ The TimelineViewController
 
 We want to present the created blogposts in a UITableView.
 
-Create a Controller named `TimelineViewController` which inherits from
+Create a controller named `TimelineViewController` which inherits from
 UITableViewController.
 This is what the controller looks like:
 
@@ -143,8 +143,8 @@ BlogPost.m::
 BlogPost interface
 ------------------
 
-The interface defines all the properties a blogPost have. Because `id` is a
-reserved keyword we name it blogPostId here.
+The interface defines all the properties a blogPost has. Because `id` is a
+reserved keyword we name it `blogPostId` here.
 
 BlogPost implementation
 -----------------------
@@ -152,7 +152,7 @@ BlogPost implementation
 We implement the two methods declared in the interface.
 
 The `mapping` defines how RestKit should map the JSON data returned from the
-API. For Details about Mapping see:
+API. For details about mapping see:
 `Object Mapping <https://github.com/RestKit/RestKit/wiki/Object-mapping>`_
 
 The `formattedDate` method returns a string representation of the `created`
@@ -181,14 +181,14 @@ Before we can fetch the data from our API, we have to setup RestKit. So create
         [RKObjectManager setSharedManager:manager];
     }
 
-Within the first four lines we setup a RKObjectManager with the base url
-of the backend. We also define that the manager sends json and interprets
+Within the first four lines we setup an RKObjectManager with the base url
+of the backend. We also ensure that the manager sends json and interprets
 the response data as json.
 
 The ResponseDescriptor defines that the `/blogposts` endpoint should return
 a 200 OK status when a GET request gets performed. The returned json contains
-a data object with a blogposts list (KeyPath: data.blogposts). Every object in
-this list should be deserialized as `BlogPost` object using the
+a data object with a `blogposts` list (KeyPath: data.blogposts). Every object in
+this list should be deserialized as a `BlogPost` object using the
 [BlogPost mapping] we defined earlier.
 
 Of course you have to call the `setUpRestKit` method at app launch::
@@ -270,7 +270,7 @@ Refresh
 
 Within the refresh method we use RestKit to fetch all objects at `/blogposts`.
 Because RestKit is configured to map the results of `/blogposts` as BlogPost
-models, we just have to assign the mapped results to `self.blogPosts` and to
+models, we just have to assign the mapped results to `self.blogPosts` and 
 reload the `TableView`.
 
 If you start the backend and the ios app, you should see the created blogposts.
@@ -291,7 +291,7 @@ the date and creator of the blogpost, we create our own `BlogPostTableViewCell`:
 .. note::
 
     You don't have to create the view programmatically, if you prefer
-    to use Inteface Builder.
+    to use Interface Builder.
 
 After adding them to the project, you have to update the `cellForRowAtindexPath`
 method::
@@ -334,13 +334,13 @@ which calls the refresh method::
                       forControlEvents:UIControlEventValueChanged];
     }
 
-It's also necessary to end refreshing after the data is loaded. So add the the
+It's also necessary to end refreshing after the data is loaded. To do this add the 
 following line to the `success` and `failure` blocks located in the refresh
 method::
 
     [self.refreshControl endRefreshing];
 
-So the success block looks like::
+The success block now looks like::
 
     success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         self.blogPosts = [mappingResult array];

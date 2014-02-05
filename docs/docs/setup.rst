@@ -37,7 +37,7 @@ Create the microblog project::
 
     sh$ cookiecutter https://github.com/lovelysystems/cookiecutter-lovely-setup
 
-Cookiecutter wants some input. Except the `repo_name` you can leave the fields
+Cookiecutter wants some input. Except for the `repo_name` you can leave the fields
 blank and just press Enter to use the defaults. Of course you may
 change the `company_name`, `email` etc. ::
 
@@ -80,8 +80,8 @@ several files::
     var
     versions.cfg
 
-So you have successfully created the development environment!
-If you are using git you can initialize a repo::
+You now have successfully created the development environment!
+If you are using git you could initialize a repo with something like this::
 
     sh$ cd microblog
     sh$ git init
@@ -143,8 +143,8 @@ To stop the app or crate run::
 Non Sandboxed Development Setup
 ===============================
 
-If you prefer to not use buildout you can install crate and lovely.pyrest
-by your own following those instructions::
+If you prefer not to use buildout you can install crate and lovely.pyrest
+on your own following these instructions::
 
     - `Setup Lovely Pyrest <http://lovelysystems.github.io/lovely.pyrest/setup.html>`_
     - `Crate <https://github.com/crate/crate>`_

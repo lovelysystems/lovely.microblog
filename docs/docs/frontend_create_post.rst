@@ -2,7 +2,7 @@
 Create new Posts in Frontend
 ============================
 
-In the last chapter we created an ios app which shows all the blogposts.
+In the last chapter we created an iOS app which shows all the blogposts.
 Now let's see how we use the API to create new blogposts.
 
 Update RestKit setUp
@@ -10,8 +10,8 @@ Update RestKit setUp
 
 First of all define how RestKit should post `BlogPosts` and how the response
 data should be deserialized.
-So add a response and a request descriptor for POST Requests to `/blogposts` in
-the `setUpRestKit` method, which we defined earliear in the AppDelegate::
+To do this add a response and a request descriptor for POST Requests to `/blogposts` in
+the `setUpRestKit` method, which we defined earlier in the AppDelegate::
 
     RKResponseDescriptor* blogPostPostResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
                                                                                     method:RKRequestMethodPOST
@@ -60,7 +60,7 @@ This is the interface::
     
     @end
 
-`Here <https://github.com/lovelysystems/lovely.microblog/blob/master/frontend-ios/microblog/microblog/timeline/CreateBlogPostView.m>`_ you find a possible implementation for the view.
+`Here <https://github.com/lovelysystems/lovely.microblog/blob/master/frontend-ios/microblog/microblog/timeline/CreateBlogPostView.m>`_ you can find a possible implementation for the view.
 
 The View Controller
 ===================
@@ -156,8 +156,8 @@ implement that.
 Initialization
 --------------
 
-The initialization code, just adds two buttons to the navigation Bar.
-We disable the `Send` button because the `textView` is empty at start and we
+The initialization code just adds two buttons to the navigation bar.
+We disable the `Send` button because the `textView` is empty in the beginning and we
 don't want the user to send an empty post.
 
 Load View
@@ -172,8 +172,8 @@ Send Post
 ---------
 
 Within the `sendPost` method a `BlogPost` is created and the textViews's text
-is assigned as text property.
-Then the created object is sent to the `/blogposts` endpoint. If something
+is assigned as a text property.
+Then the newly created object is sent to the `/blogposts` endpoint. If something
 goes wrong, the views `showError:` method is used to show an error message, else
 the controller is dismissed.
 
