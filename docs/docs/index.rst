@@ -40,9 +40,9 @@ You should have git installed to do this::
 
 The repository contains three directories:
 
-    /backend
-    /docs
-    /frontend
+|    /backend
+|    /docs
+|    /frontend
 
 The `/backend` directory contains all the sources for the backend
 application and a README file. Follow the instructions in README to setup the app.
