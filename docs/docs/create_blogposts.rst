@@ -176,10 +176,13 @@ The create method has two decorators. As in the list method the
 `rpcmethod_route` decorator declares that the create method should be used
 if a POST request is performed on the service.
 
-If a new model is created and a query is performed immediately afterwards, the new model will not appear in the query result. This is because crate stores the model in an internal transaction buffer which is not used for queries.
-The `refresher` decorator declares that crate should be refreshed after executing
-the method. So all operations since the last refresh get performed and the model
-will appear in the query results.
+If a new model is created and a query is performed immediately
+afterwards, the new model will not appear in the query result. This is
+because crate stores the model in an internal transaction buffer which
+is not used for queries. The `refresher` decorator declares that crate
+should be refreshed after executing the method. So all operations
+since the last refresh get performed and the model will appear in the
+query results.
 
 .. note::
 
