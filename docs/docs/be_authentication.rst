@@ -188,10 +188,10 @@ The list method
 As the list method in the blogposts service we fetch all users and
 build a result list which contains the usernames.
 
-Because we don't want strangers to see the user list we require the
-`Authenticated` permission. For this we use the `rpcmethod_view` decorator.
-While the `rpcmethod_route` decorator decorates the pyramid route of the
-endpoint the view decorator decorates the view, permission is view specific.
+Sometimes it's required to pass arguments to the view. For this case use the
+decorator `rpcmethod_view`.
+Because we don't want strangers to see the user list we use the `rpcmethod_view`
+decorator to pass the required permission to the view.
 
 It's also possible to restrict the whole service::
 
