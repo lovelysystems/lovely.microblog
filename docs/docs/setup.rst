@@ -3,8 +3,8 @@ Setup Your First Application
 ============================
 
 Let's start creating the backend application. In this tutorial we will build
-a small microblogging application, where you can create blogposts,
-follow other users and read their blogposts.
+a tiny blogging application, where registered users can create posts which can
+be read by anyone.
 
 Sandboxed Development Setup
 ===========================

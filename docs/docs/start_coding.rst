@@ -2,8 +2,8 @@
 Start Coding
 ============
 
-As mentioned before we want to build a small microblogging application, where
-you can create blogposts, follow other users and read their blogposts.
+As mentioned before we want to build a small blogging application, where
+users can create and read blogposts.
 
 The microblog Application
 =========================
