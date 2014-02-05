@@ -88,7 +88,7 @@ for your backend</li>
 <div class="highlight-python"><pre>sh$ pip install https://download.lovelysystems.com/public/cookiecutter-0.7.0-conditional.tar.gz</pre>
 </div>
 <p>Create the microblog project:</p>
-<div class="highlight-python"><pre>sh$ cookiecutter https://github.com/lovelysystems/cookiecutter-lovely-setup</pre>
+<div class="highlight-python"><pre>sh$ cookiecutter git@github.com:lovelysystems/cookiecutter-lovely-setup</pre>
 </div>
 <p>Cookiecutter wants some input. Except for the <cite>repo_name</cite> you can leave the fields
 blank and just press Enter to use the defaults. Of course you may
@@ -135,7 +135,7 @@ versions.cfg</pre>
 If you are using git you could initialize a repo with something like this:</p>
 <div class="highlight-python"><pre>sh$ cd microblog
 sh$ git init
-sh$ git add
+sh$ git add .
 sh$ git commit -m "Initial commit"</pre>
 </div>
 </div>
@@ -189,9 +189,12 @@ crate                            RUNNING ...</pre>
 <h2>Non Sandboxed Development Setup<a class="headerlink" href="#non-sandboxed-development-setup" title="Permalink to this headline">¶</a></h2>
 <p>If you prefer not to use buildout you can install crate and lovely.pyrest
 on your own following these instructions:</p>
-<div class="highlight-python"><pre>- `Setup Lovely Pyrest &lt;http://lovelysystems.github.io/lovely.pyrest/setup.html&gt;`_
-- `Crate &lt;https://github.com/crate/crate&gt;`_</pre>
-</div>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://lovelysystems.github.io/lovely.pyrest/setup.html">Setup Lovely Pyrest</a></li>
+<li><a class="reference external" href="https://github.com/crate/crate">Crate</a></li>
+</ul>
+</div></blockquote>
 </div>
 </div>
 

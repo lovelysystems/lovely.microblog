@@ -35,7 +35,7 @@ Install cookiecutter::
 
 Create the microblog project::
 
-    sh$ cookiecutter https://github.com/lovelysystems/cookiecutter-lovely-setup
+    sh$ cookiecutter git@github.com:lovelysystems/cookiecutter-lovely-setup
 
 Cookiecutter wants some input. Except for the `repo_name` you can leave the fields
 blank and just press Enter to use the defaults. Of course you may
@@ -85,7 +85,7 @@ If you are using git you could initialize a repo with something like this::
 
     sh$ cd microblog
     sh$ git init
-    sh$ git add
+    sh$ git add .
     sh$ git commit -m "Initial commit"
 
 Bootstrap and buildout
@@ -144,7 +144,7 @@ Non Sandboxed Development Setup
 ===============================
 
 If you prefer not to use buildout you can install crate and lovely.pyrest
-on your own following these instructions::
+on your own following these instructions:
 
     - `Setup Lovely Pyrest <http://lovelysystems.github.io/lovely.pyrest/setup.html>`_
     - `Crate <https://github.com/crate/crate>`_
