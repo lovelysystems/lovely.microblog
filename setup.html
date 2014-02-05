@@ -1,0 +1,261 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Setup Your First Application &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
+    <link rel="next" title="Start Coding" href="start_coding.html" />
+    <link rel="prev" title="Requirements" href="requirements.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="start_coding.html" title="Start Coding"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="requirements.html" title="Requirements"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="setup-your-first-application">
+<h1>Setup Your First Application<a class="headerlink" href="#setup-your-first-application" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s start creating the backend application. In this tutorial we will build
+a tiny blogging application, where registered users can create posts which can
+be read by anyone.</p>
+<div class="section" id="sandboxed-development-setup">
+<h2>Sandboxed Development Setup<a class="headerlink" href="#sandboxed-development-setup" title="Permalink to this headline">¶</a></h2>
+<p>We prefer to use a sandboxed development setup, using
+<a class="reference external" href="http://www.buildout.org/en/latest/">buildout</a>. Buildout is a Python-based build
+system for creating, assembling and deploying applications.</p>
+<div class="section" id="project-template">
+<h3>Project Template<a class="headerlink" href="#project-template" title="Permalink to this headline">¶</a></h3>
+<p>We provide a <a class="reference external" href="https://github.com/audreyr/cookiecutter">cookiecutter</a> project
+template which contains a working buildout configuration including:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Basic setup for an application using lovely.pyrest</li>
+<li>scripts to setup and teardown the crate database</li>
+<li>A configured <a class="reference external" href="http://supervisord.org">supervisord</a> to control the crate
+and app processes for development</li>
+<li>A script to generate a <a class="reference external" href="http://sphinx-doc.org">sphinx</a>&gt;`_ documentation
+for your backend</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="setup-using-the-template">
+<h3>Setup using the template<a class="headerlink" href="#setup-using-the-template" title="Permalink to this headline">¶</a></h3>
+<p>Install cookiecutter:</p>
+<div class="highlight-python"><pre>sh$ pip install https://download.lovelysystems.com/public/cookiecutter-0.7.0-conditional.tar.gz</pre>
+</div>
+<p>Create the microblog project:</p>
+<div class="highlight-python"><pre>sh$ cookiecutter https://github.com/lovelysystems/cookiecutter-lovely-setup</pre>
+</div>
+<p>Cookiecutter wants some input. Except the <cite>repo_name</cite> you can leave the fields
+blank and just press Enter to use the defaults. Of course you may
+change the <cite>company_name</cite>, <cite>email</cite> etc.</p>
+<div class="highlight-python"><pre>Cloning into 'cookiecutter-lovely-setup'...
+remote: Counting objects: 42, done.
+remote: Compressing objects: 100% (32/32), done.
+remote: Total 42 (delta 7), reused 39 (delta 4)
+Unpacking objects: 100% (42/42), done.
+Checking connectivity... done
+company_name (default is "Lovely Systems")?
+email (default is "office@lovelysystems.com")?
+github_username (default is "lovelysystems")?
+project_name (default is "Lovely Boilerplate")? Lovely Microblog
+repo_name (default is "boilerplate")? microblog
+project_short_description (default is "Python Boilerplate contains all the boilerplate you need to create a Python package.")? Yet another microblog
+release_date (default is "2014-01-24")? y
+year (default is "2014")? y
+version (default is "0.0.0")? y
+py_package (default is "yes")? y
+buildout (default is "yes")? y
+pyrest (default is "yes")? y
+crate (default is "yes")? y
+supervisor (default is "yes")? y
+sphinx (default is "yes")? y</pre>
+</div>
+<p>There should be a folder called <cite>microblog</cite> (or your repo_name) which contains
+several files:</p>
+<div class="highlight-python"><pre>sh$ ls microblog
+CHANGES.rst
+README.rst
+bootstrap.py
+buildout.cfg
+crate.cfg
+docs
+etc
+log
+microblog
+setup.py
+var
+versions.cfg</pre>
+</div>
+<p>So you have successfully created the development environment!
+If you are using git you can initialize a repo:</p>
+<div class="highlight-python"><pre>sh$ cd microblog
+sh$ git init
+sh$ git add
+sh$ git commit -m "Initial commit"</pre>
+</div>
+</div>
+<div class="section" id="bootstrap-and-buildout">
+<h3>Bootstrap and buildout<a class="headerlink" href="#bootstrap-and-buildout" title="Permalink to this headline">¶</a></h3>
+<p>After creating or checking out the project the first time you have to bootstrap
+the app:</p>
+<div class="highlight-python"><pre>sh$ python2.7 bootstrap.py
+Creating directory '/Users/philipp/sandbox/test/microblog/bin'.
+Creating directory '/Users/philipp/sandbox/test/microblog/parts'.
+Creating directory '/Users/philipp/sandbox/test/microblog/develop-eggs'.
+Generated script '/Users/philipp/sandbox/test/microblog/bin/buildout'</pre>
+</div>
+<p>The created <cite>bin</cite> directory contains a buildout script:</p>
+<div class="highlight-python"><pre>sh$ bin/buildout -N</pre>
+</div>
+<p>If nothing went wrong, the <cite>bin</cite> directory contains all the scripts you need to start developing:</p>
+<div class="highlight-python"><pre>sh$ ls -l bin
+app
+buildout
+crash
+crate_cleanup
+crate_setup
+py
+sphinx-html
+supervisorctl
+supervisord</pre>
+</div>
+<p>The app script starts the app in foreground:</p>
+<div class="highlight-python"><pre>sh$ bin/app</pre>
+</div>
+<p>So you can make some requests:</p>
+<div class="highlight-python"><pre>sh$ curl -XGET localhost:9210
+&lt;html&gt;
+    ...
+    &lt;title&gt;404 Not Found&lt;/title&gt;
+...</pre>
+</div>
+<p>The supervisord script starts the app and crate in background:</p>
+<div class="highlight-python"><pre>sh$ bin/supervisord
+sh$ bin/supervisorctl status
+app                              RUNNING ...
+crate                            RUNNING ...</pre>
+</div>
+<p>To stop the app or crate run:</p>
+<div class="highlight-python"><pre>sh$ bin/supervisorctl stop app</pre>
+</div>
+</div>
+</div>
+<div class="section" id="non-sandboxed-development-setup">
+<h2>Non Sandboxed Development Setup<a class="headerlink" href="#non-sandboxed-development-setup" title="Permalink to this headline">¶</a></h2>
+<p>If you prefer to not use buildout you can install crate and lovely.pyrest
+by your own following those instructions:</p>
+<div class="highlight-python"><pre>- `Setup Lovely Pyrest &lt;http://lovelysystems.github.io/lovely.pyrest/setup.html&gt;`_
+- `Crate &lt;https://github.com/crate/crate&gt;`_</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setup Your First Application</a><ul>
+<li><a class="reference internal" href="#sandboxed-development-setup">Sandboxed Development Setup</a><ul>
+<li><a class="reference internal" href="#project-template">Project Template</a></li>
+<li><a class="reference internal" href="#setup-using-the-template">Setup using the template</a></li>
+<li><a class="reference internal" href="#bootstrap-and-buildout">Bootstrap and buildout</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-sandboxed-development-setup">Non Sandboxed Development Setup</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="requirements.html"
+                        title="previous chapter">Requirements</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="start_coding.html"
+                        title="next chapter">Start Coding</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="start_coding.html" title="Start Coding"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="requirements.html" title="Requirements"
+             >previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Lovely Systems.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

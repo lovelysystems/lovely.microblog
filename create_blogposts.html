@@ -1,0 +1,367 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Create Blogposts &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
+    <link rel="next" title="Use the API within an iOS application" href="frontend_blogposts.html" />
+    <link rel="prev" title="Start Coding" href="start_coding.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="frontend_blogposts.html" title="Use the API within an iOS application"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="start_coding.html" title="Start Coding"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="create-blogposts">
+<h1>Create Blogposts<a class="headerlink" href="#create-blogposts" title="Permalink to this headline">¶</a></h1>
+<p>As next step we want to create and list blogposts.</p>
+<div class="section" id="blogpost-table">
+<h2>blogpost table<a class="headerlink" href="#blogpost-table" title="Permalink to this headline">¶</a></h2>
+<p>We want the Blogposts to have these columns:</p>
+<div class="highlight-python"><pre>- id: primary key
+- text: content of the post
+- created: current timestamp, so we can order the posts chronological
+- creator: name of the creator</pre>
+</div>
+<p>Open the file <cite>&lt;project-dir&gt;/etc/crate_setup.sql</cite> and add the following sql
+expression:</p>
+<div class="highlight-python"><pre>create table blogpost (id string primary key, created timestamp, text string, creator string)</pre>
+</div>
+<p>Add the following line to the <cite>create_cleanup.sql</cite> file:</p>
+<div class="highlight-python"><pre>drop table blogpost</pre>
+</div>
+<p>Ensure that crate is started:</p>
+<div class="highlight-python"><pre>bin/supervisorctl start crate</pre>
+</div>
+<p>Run:</p>
+<div class="highlight-python"><pre>$sh bin/crate_setup
++-----------------------+-----------+-----------+---------+
+| server_url            | node_name | connected | message |
++-----------------------+-----------+-----------+---------+
+| http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
++-----------------------+-----------+-----------+---------+
+CONNECT OK
+CREATE OK (0.083 sec)</pre>
+</div>
+<p>If you want to reset crate run:</p>
+<div class="highlight-python"><pre>$sh bin/crate_cleanup
++-----------------------+-----------+-----------+---------+
+| server_url            | node_name | connected | message |
++-----------------------+-----------+-----------+---------+
+| http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
++-----------------------+-----------+-----------+---------+
+CONNECT OK
+DROP OK (0.014 sec)
+
+$sh bin/crate_setup
++-----------------------+-----------+-----------+---------+
+| server_url            | node_name | connected | message |
++-----------------------+-----------+-----------+---------+
+| http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
++-----------------------+-----------+-----------+---------+
+CONNECT OK
+CREATE OK (0.083 sec)</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The crate_cleanup and crate_setup scripts just pipe the contents of the sql
+files to bin/crash. So every line in the script gets executed as a separate
+command. Consequential you cannot split an expression into multiple lines
+and you have to ommit semicolons at the end of the statements.</p>
+</div>
+<p>You can open the following url with your browser to
+access the crate admin interface and inspect the created table:</p>
+<div class="highlight-python"><pre>$sh open http://localhost:9200/admin</pre>
+</div>
+</div>
+<div class="section" id="blogpost-sql-alchemy-model">
+<h2>BlogPost SQL Alchemy model<a class="headerlink" href="#blogpost-sql-alchemy-model" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://www.sqlalchemy.org">SQLAlchemy</a> is a python SQL toolkit and Object Relational
+Mapper.
+Let&#8217;s create a BlogPost model which is the python representation of the already
+created <cite>blogpost</cite> table.
+Add a new file named <cite>model.py</cite> into the <cite>blogpost</cite> module with the following
+contents:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">DateTime</span>
+<span class="kn">from</span> <span class="nn">microblog.model</span> <span class="kn">import</span> <span class="n">Base</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+
+
+<span class="k">def</span> <span class="nf">genuuid</span><span class="p">():</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+
+
+<span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;blogpost&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">genuuid</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">creator</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="s">&#39;creator&#39;</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="s">&#39;created&#39;</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The BlogPost class must inherit from <cite>Base</cite> which is declared in <cite>microblog.model</cite>.
+For details see
+<a class="reference external" href="http://docs.sqlalchemy.org/en/rel_0_9/orm/tutorial.html#declare-a-mapping">Declare a Mapping</a></p>
+</div>
+<div class="section" id="read-blogposts">
+<h2>Read Blogposts<a class="headerlink" href="#read-blogposts" title="Permalink to this headline">¶</a></h2>
+<p>Modify the <cite>list</cite> method of the service, so it returns all the blogposts:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&quot;GET&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return all blogposts</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">DBSession</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">BlogPost</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">BlogPost</span><span class="o">.</span><span class="n">created</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
+    <span class="n">blogposts</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">blogposts</span><span class="p">:</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="n">post</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                       <span class="s">&#39;created&#39;</span><span class="p">:</span> <span class="n">post</span><span class="o">.</span><span class="n">created</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+                       <span class="s">&#39;text&#39;</span><span class="p">:</span> <span class="n">post</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                       <span class="s">&#39;creator&#39;</span><span class="p">:</span> <span class="n">post</span><span class="o">.</span><span class="n">creator</span><span class="p">})</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;blogposts&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>You have to add the following imports:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">microblog.model</span> <span class="kn">import</span> <span class="n">DBSession</span>
+<span class="kn">from</span> <span class="nn">microblog.blogpost.model</span> <span class="kn">import</span> <span class="n">BlogPost</span>
+</pre></div>
+</div>
+<div class="section" id="query">
+<h3>Query<a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h3>
+<p>With the first statement we build the query to fetch all BlogPosts ordered by creation date.
+<cite>query.all()</cite> returns the query result as list.</p>
+</div>
+<div class="section" id="result">
+<h3>Result<a class="headerlink" href="#result" title="Permalink to this headline">¶</a></h3>
+<p>After querying the blogposts we build a result list, which contains all the
+data of the fetched blogposts.</p>
+</div>
+<div class="section" id="run-the-application">
+<h3>Run the application<a class="headerlink" href="#run-the-application" title="Permalink to this headline">¶</a></h3>
+<p>Restart the app and request the blogpost service again:</p>
+<div class="highlight-python"><pre>$sh curl http://localhost:9210/blogposts
+{"data": {"blogposts": []}}</pre>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Create BlogPosts<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>For creating BlogPosts add a <cite>create</cite> method to the <cite>BlogPost</cite> service:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">)</span>
+<span class="nd">@refresher</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Create a blogpost with the given text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blogpost</span> <span class="o">=</span> <span class="n">BlogPost</span><span class="p">()</span>
+    <span class="n">blogpost</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+    <span class="n">blogpost</span><span class="o">.</span><span class="n">created</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="n">blogpost</span><span class="o">.</span><span class="n">creator</span> <span class="o">=</span> <span class="s">&#39;anonym&#39;</span>
+    <span class="n">DBSession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">blogpost</span><span class="p">)</span>
+    <span class="n">DBSession</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="n">blogpost</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>And add those imports:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">microblog.model</span> <span class="kn">import</span> <span class="n">DBSession</span><span class="p">,</span> <span class="n">refresher</span>
+</pre></div>
+</div>
+<div class="section" id="decorators">
+<h3>Decorators<a class="headerlink" href="#decorators" title="Permalink to this headline">¶</a></h3>
+<p>The create method has two decorators. As in the list method the
+<cite>rpcmethod_route</cite> decorator defines that the create method should be used
+if a POST request is performed on the service.</p>
+<p>If a new model is created and a query is performed immediately after the new
+model is created the new model will not appear in the query result. This is because crate stores the model in an internal transaction buffer which is not used for queries.
+The <cite>refresher</cite> decorator defines that crate should be refreshed after executing
+the method. So all operations get performed since the last refresh and the model
+will appear in query results.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Crate automatically refreshes all indices periodically, but if you modify
+or create any data we recommend to add the <cite>refresher</cite> decorator.
+Else you may get outdated data if you query the modfied data before the next
+refresh is scheduled.
+If you want to query the created data within the same method you can
+refresh crate with the <cite>refresh_indices</cite> function, declared in <cite>microblog.model</cite></p>
+</div>
+</div>
+<div class="section" id="method-header">
+<h3>Method Header<a class="headerlink" href="#method-header" title="Permalink to this headline">¶</a></h3>
+<p>The method takes a <cite>text</cite> parameter. If you perform a request you have multiple
+ways to pass this parameter.</p>
+<p>Form-Data:</p>
+<div class="highlight-python"><pre>curl -XPOST localhost:9210/blogposts -d "text=Hello Form data"</pre>
+</div>
+<p>GET-Parameter:</p>
+<div class="highlight-python"><pre>curl -XPOST localhost:9210/blogposts?text="Hello GET Parameter"</pre>
+</div>
+<p>JSON-Body:</p>
+<div class="highlight-python"><pre>curl -XPOST localhost:9210/blogposts -d '{"text":"Hello Json"}' -H "Content-Type: application/json"</pre>
+</div>
+</div>
+<div class="section" id="method-body">
+<h3>Method Body<a class="headerlink" href="#method-body" title="Permalink to this headline">¶</a></h3>
+<p>In the method body we create a new <cite>BlogPost</cite>. Then we assign the passed text
+and set datetime.now as the <cite>created</cite> value.
+Because we don&#8217;t have any user handling yet, we temporary use <cite>anonym</cite> as
+creator name.</p>
+<p>If a new model instance, like the Blogpost, is created it is not automatically
+assigned to the database.
+This must be done using the DBSession.add method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">DBSession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">blogpost</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After this the BlogPost is not stored in the database but is recognized by
+SQLAlchemy as an object which needs to be stored.</p>
+<p>To store the model a flush operation must be performed on the DBSession.
+A flush will perform all pending database operations with the result that the
+objects are written to the database:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">DBSession</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Usually there is no need to do this manually because SQLAlchemy and the
+transaction manager keeps track of this.
+But the id of a model is only created when the model is written to the
+database, so we perform the flush manually, because we want to return the
+id of the created model.</p>
+<p>Finally, you have a working API where you can add and read blogPosts:</p>
+<div class="highlight-python"><pre>$sh curl -XPOST localhost:9210/blogposts -d '{"text":"This is my First Blogpost"}' -H "Content-Type: application/json"
+{"id": "..."}
+
+$sh curl localhost:9210/blogposts
+{
+    "data": {
+        "blogposts": [
+            {
+                "created": "...",
+                "creator": "anonym",
+                "id": "...",
+                "text": "This is my First Blogpost"
+            }
+        ]
+    }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Create Blogposts</a><ul>
+<li><a class="reference internal" href="#blogpost-table">blogpost table</a></li>
+<li><a class="reference internal" href="#blogpost-sql-alchemy-model">BlogPost SQL Alchemy model</a></li>
+<li><a class="reference internal" href="#read-blogposts">Read Blogposts</a><ul>
+<li><a class="reference internal" href="#query">Query</a></li>
+<li><a class="reference internal" href="#result">Result</a></li>
+<li><a class="reference internal" href="#run-the-application">Run the application</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">Create BlogPosts</a><ul>
+<li><a class="reference internal" href="#decorators">Decorators</a></li>
+<li><a class="reference internal" href="#method-header">Method Header</a></li>
+<li><a class="reference internal" href="#method-body">Method Body</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="start_coding.html"
+                        title="previous chapter">Start Coding</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="frontend_blogposts.html"
+                        title="next chapter">Use the API within an iOS application</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="frontend_blogposts.html" title="Use the API within an iOS application"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="start_coding.html" title="Start Coding"
+             >previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Lovely Systems.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

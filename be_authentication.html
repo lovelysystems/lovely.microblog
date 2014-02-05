@@ -1,0 +1,413 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Authentication &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
+    <link rel="next" title="Login within the iOS application" href="frontend_login.html" />
+    <link rel="prev" title="Create new Posts in Frontend" href="frontend_create_post.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="frontend_login.html" title="Login within the iOS application"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="frontend_create_post.html" title="Create new Posts in Frontend"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="authentication">
+<h1>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h1>
+<p>Our application currently allows anyone with access to the server to view and create blogposts.
+We&#8217;ll change that to allow only registered users to create blogposts.</p>
+<p>So we need a service to create new users and we have to implement access control.</p>
+<p>As in <cite>Create Blogposts</cite> we will:</p>
+<blockquote>
+<div><ul class="simple">
+<li>create a database table</li>
+<li>create a SQL Alchemy model</li>
+<li>implement a user service</li>
+<li>restrict the create blogpost endpoint to registered users</li>
+</ul>
+</div></blockquote>
+<div class="section" id="users-table">
+<h2>users table<a class="headerlink" href="#users-table" title="Permalink to this headline">¶</a></h2>
+<p>We want to create a very basic user with these columns:</p>
+<div class="highlight-python"><pre>- id: primary key
+- name: username
+- password: the users password</pre>
+</div>
+<p>Open the file <cite>&lt;project-dir&gt;/etc/crate_setup.sql</cite> and add the following sql
+expression:</p>
+<div class="highlight-python"><pre>create table users (id string primary key, name string, password string)</pre>
+</div>
+<p>Add the following line to the <cite>create_cleanup.sql</cite> file:</p>
+<div class="highlight-python"><pre>drop table users</pre>
+</div>
+<p>Ensure that crate is running and then run crate_setup:</p>
+<div class="highlight-python"><pre>$sh bin/crate_setup</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">you might get an error because the <cite>blogpost</cite> table is already created. This
+error can be ignored.</p>
+</div>
+</div>
+<div class="section" id="user-sql-alchemy-model">
+<h2>User SQL Alchemy model<a class="headerlink" href="#user-sql-alchemy-model" title="Permalink to this headline">¶</a></h2>
+<p>Create a new <cite>user</cite> module as we created the <cite>blogpost</cite> module
+before:</p>
+<div class="highlight-python"><pre>$sh mkdir user
+$sh touch user/__init__.py</pre>
+</div>
+<p>Create the file <cite>user/model.py</cite> with the following contents:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span>
+<span class="kn">from</span> <span class="nn">microblog.model</span> <span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">genuuid</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;users&#39;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">genuuid</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="s">&#39;password&#39;</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Also move the <cite>genuuid</cite> function from <cite>microblog/blogpost/model.py</cite> to
+<cite>microblog/model.py</cite> and change the import at the top of
+<cite>microblog/blogpost/model.py</cite> to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">microblog.model</span> <span class="kn">import</span> <span class="n">Base</span><span class="p">,</span> <span class="n">genuuid</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enabling-authentication-policy">
+<h2>Enabling Authentication Policy<a class="headerlink" href="#enabling-authentication-policy" title="Permalink to this headline">¶</a></h2>
+<p>By default, Pyramid enables no authentication policy. All views are accessible
+by completely anonymous users. In order to begin protecting views from execution
+based on security settings, you need to enable an authentication policy.</p>
+<p>To do that we have to change the instantiation of the Configurator
+in <cite>microblog.server.app_factory</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyramid.authentication</span> <span class="kn">import</span> <span class="n">AuthTktAuthenticationPolicy</span>
+<span class="o">...</span>
+<span class="k">def</span> <span class="nf">app_factory</span><span class="p">(</span><span class="n">global_config</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">):</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">Configurator</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                          <span class="n">autocommit</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                          <span class="n">authentication_policy</span><span class="o">=</span><span class="n">AuthTktAuthenticationPolicy</span><span class="p">(</span><span class="s">&#39;your-secret-token&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Also create an AuthACLFactory in the <cite>service.py</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyramid</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="o">...</span>
+<span class="k">class</span> <span class="nc">AuthACLFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__acl__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">authenticated_userid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[(</span><span class="n">security</span><span class="o">.</span><span class="n">Allow</span><span class="p">,</span> <span class="n">security</span><span class="o">.</span><span class="n">Everyone</span><span class="p">,</span> <span class="n">security</span><span class="o">.</span><span class="n">Authenticated</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+</pre></div>
+</div>
+<p>The factory checks if the user is logged in and adds the permissions
+<cite>Allow, Everyone and Authenticated</cite> to the current context.</p>
+<p>For details about authentication and authorization in pyramid see:
+<a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/security.html">Pyramid security</a>.</p>
+</div>
+<div class="section" id="the-user-service">
+<h2>The user service<a class="headerlink" href="#the-user-service" title="Permalink to this headline">¶</a></h2>
+<p>Create the file <cite>user/service.py</cite> with the following contents:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyramid</span> <span class="kn">import</span> <span class="n">security</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm.exc</span> <span class="kn">import</span> <span class="n">NoResultFound</span>
+<span class="kn">from</span> <span class="nn">lovely.pyrest.rest</span> <span class="kn">import</span> <span class="n">RestService</span><span class="p">,</span> <span class="n">rpcmethod_route</span><span class="p">,</span> <span class="n">rpcmethod_view</span>
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha1</span>
+
+<span class="kn">from</span> <span class="nn">microblog.server</span> <span class="kn">import</span> <span class="n">AuthACLFactory</span>
+<span class="kn">from</span> <span class="nn">microblog.user.model</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">DBSession</span><span class="p">,</span> <span class="n">refresher</span>
+
+
+<span class="nd">@RestService</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">UserService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="nd">@rpcmethod_route</span><span class="p">()</span>
+    <span class="nd">@rpcmethod_view</span><span class="p">(</span><span class="n">permission</span><span class="o">=</span><span class="n">security</span><span class="o">.</span><span class="n">Authenticated</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; List all registered users &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">DBSession</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">})</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;users&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">}}</span>
+
+    <span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">route_suffix</span><span class="o">=</span><span class="s">&quot;/register&quot;</span><span class="p">,</span> <span class="n">request_method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">)</span>
+    <span class="nd">@refresher</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Register a new user &quot;&quot;&quot;</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">()</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+        <span class="n">DBSession</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&quot;status&quot;</span><span class="p">:</span> <span class="s">&quot;success&quot;</span><span class="p">}</span>
+
+    <span class="nd">@rpcmethod_route</span><span class="p">(</span><span class="n">route_suffix</span><span class="o">=</span><span class="s">&quot;/login&quot;</span><span class="p">,</span> <span class="n">request_method</span><span class="o">=</span><span class="s">&quot;POST&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Login the given user &quot;&quot;&quot;</span>
+        <span class="n">hashed_pwd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">DBSession</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">,</span>
+                                             <span class="n">User</span><span class="o">.</span><span class="n">password</span> <span class="o">==</span> <span class="n">hashed_pwd</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s">&#39;failed&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">one</span><span class="p">()</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">remember</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">headerlist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s">&#39;success&#39;</span>
+        <span class="k">except</span> <span class="n">NoResultFound</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="mi">401</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s">&quot;status&quot;</span><span class="p">:</span> <span class="n">status</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">hash_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
+            <span class="n">password_8bit</span> <span class="o">=</span> <span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">password_8bit</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="n">hashed</span> <span class="o">=</span> <span class="n">sha1</span><span class="p">(</span><span class="s">&#39;salt&#39;</span> <span class="o">+</span> <span class="n">password_8bit</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hashed</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
+            <span class="n">hashed</span> <span class="o">=</span> <span class="n">hashed</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hashed</span>
+
+
+<span class="k">def</span> <span class="nf">includeme</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">,</span> <span class="s">&#39;/users&#39;</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="n">AuthACLFactory</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="the-list-method">
+<h3>The list method<a class="headerlink" href="#the-list-method" title="Permalink to this headline">¶</a></h3>
+<p>As the list method in the blogposts service we fetch all users and
+build a result list which contains the usernames.</p>
+<p>Because we don&#8217;t want strangers to see the user list we require the
+<cite>Authenticated</cite> permission. For this we use the <cite>rpcmethod_view</cite> decorator.
+While the <cite>rpcmethod_route</cite> decorator decorates the pyramid route of the
+endpoint the view decorator decorates the view, permission is view specific.</p>
+<p>It&#8217;s also possible to restrict the whole service:</p>
+<div class="highlight-python"><pre>@RestService('users', permission=security.Authenticated)</pre>
+</div>
+<p>We shouldn&#8217;t do that, because register and login must be accessible for every
+user.</p>
+</div>
+<div class="section" id="the-register-method">
+<h3>The register method<a class="headerlink" href="#the-register-method" title="Permalink to this headline">¶</a></h3>
+<p>Like in the blogposts service we create a new user here and add it to the
+DBSession. We don&#8217;t have to flush the DBSession manually because this time
+we don&#8217;t want to return the users id in the response.</p>
+<p>We pass the parameter <cite>route_suffix</cite> to the <cite>rpcmmethod_route</cite> decorator so the
+register uri is <cite>/users/register</cite>.</p>
+</div>
+<div class="section" id="the-login-method">
+<h3>The login method<a class="headerlink" href="#the-login-method" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>login</cite> method tries to query a user with the given name and the hashed password.
+If such an user exists <cite>security.remember</cite> is called and the return header
+which contains the authentication cookie is added to the response header.</p>
+<p>If the user is not found we change the response status code to 401 UNAUTHORIZED
+and return an error status.</p>
+</div>
+<div class="section" id="includeme">
+<h3>includeme<a class="headerlink" href="#includeme" title="Permalink to this headline">¶</a></h3>
+<p>As in the blogpost service we define the route in the includeme function.
+We also pass the <cite>AuthACLFactory</cite> we created earlier, to determine the users
+permission.</p>
+</div>
+</div>
+<div class="section" id="test-the-app">
+<h2>Test the app<a class="headerlink" href="#test-the-app" title="Permalink to this headline">¶</a></h2>
+<p>Scan and include the new modules within the <cite>app_factory</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+<span class="n">config</span><span class="o">.</span><span class="n">include</span><span class="p">(</span><span class="s">&#39;microblog.user.service&#39;</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">config</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="s">&#39;microblog.user&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After restarting the app try to request the users list:</p>
+<div class="highlight-python"><pre>$sh curl -XGET localhost:9210/users
+&lt;html&gt;
+ &lt;head&gt;
+  &lt;title&gt;403 Forbidden&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+  &lt;h1&gt;403 Forbidden&lt;/h1&gt;
+  Access was denied to this resource.&lt;br/&gt;&lt;br/&gt;
+Unauthorized: UserService failed permission check
+
+
+ &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+<p>So register a new user:</p>
+<div class="highlight-python"><pre>curl -XPOST localhost:9210/users/register -d '{"name": "lovely", "password": "1234"}' -H "Content-Type: application/json"
+{"status": "success"}</pre>
+</div>
+<p>Login:</p>
+<div class="highlight-python"><pre>curl -XPOST localhost:9210/users/login -d '{"name": "lovely", "password": "1234"}' -H "Content-Type: application/json" -vv
+...
+&lt; Set-Cookie: auth_tkt="&lt;authentication_token&gt;"; Path=/; Domain=.localhost
+...
+{"status": "success"}</pre>
+</div>
+<p>Copy the authentication token and fetch the user list as authenticated user:</p>
+<div class="highlight-python"><pre>curl -XGET localhost:9210/users -H 'Cookie: auth_tkt="&lt;authentication_token&gt;"'
+{"data": {"users": [{"name": "lovely"}]}}</pre>
+</div>
+</div>
+<div class="section" id="restrict-creating-blogposts">
+<h2>Restrict Creating Blogposts<a class="headerlink" href="#restrict-creating-blogposts" title="Permalink to this headline">¶</a></h2>
+<p>To restrict the <cite>create</cite> method of the blogpost service just add this decorator:</p>
+<div class="highlight-python"><pre>@rpcmethod_view(permission=security.Authenticated)</pre>
+</div>
+<p>It&#8217;s also necessary to pass the factory when adding the route:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;blogposts&#39;</span><span class="p">,</span> <span class="s">&#39;/blogposts&#39;</span><span class="p">,</span> <span class="n">static</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">factory</span><span class="o">=</span><span class="n">AuthACLFactory</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Because only authenticated users are allowed to create a new post we can adapt
+the <cite>create</cite> method so the correct username gets assigned to creator:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">user</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">authenticated_userid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+<span class="n">blogpost</span><span class="o">.</span><span class="n">creator</span> <span class="o">=</span> <span class="n">user</span>
+</pre></div>
+</div>
+<p>Restart the app and create a new post:</p>
+<div class="highlight-python"><pre>$sh curl -XPOST localhost:9210/blogposts -H 'Cookie: auth_tkt="&lt;token&gt;"' -d '{"text": "authenticated post"}' -H "Content-Type: application/json"
+
+$sh curl -XGET localhost:9210/blogposts
+{
+    "data": {
+        "blogposts": [
+            {
+                "created": "...",
+                "creator": "lovely",
+                "id": "...",
+                "text": "authenticated post"
+            }
+        ]
+    }
+}</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Authentication</a><ul>
+<li><a class="reference internal" href="#users-table">users table</a></li>
+<li><a class="reference internal" href="#user-sql-alchemy-model">User SQL Alchemy model</a></li>
+<li><a class="reference internal" href="#enabling-authentication-policy">Enabling Authentication Policy</a></li>
+<li><a class="reference internal" href="#the-user-service">The user service</a><ul>
+<li><a class="reference internal" href="#the-list-method">The list method</a></li>
+<li><a class="reference internal" href="#the-register-method">The register method</a></li>
+<li><a class="reference internal" href="#the-login-method">The login method</a></li>
+<li><a class="reference internal" href="#includeme">includeme</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-the-app">Test the app</a></li>
+<li><a class="reference internal" href="#restrict-creating-blogposts">Restrict Creating Blogposts</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="frontend_create_post.html"
+                        title="previous chapter">Create new Posts in Frontend</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="frontend_login.html"
+                        title="next chapter">Login within the iOS application</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="frontend_login.html" title="Login within the iOS application"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="frontend_create_post.html" title="Create new Posts in Frontend"
+             >previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Lovely Systems.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

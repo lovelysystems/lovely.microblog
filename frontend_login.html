@@ -1,0 +1,352 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Login within the iOS application &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
+    <link rel="prev" title="Authentication" href="be_authentication.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="be_authentication.html" title="Authentication"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="login-within-the-ios-application">
+<h1>Login within the iOS application<a class="headerlink" href="#login-within-the-ios-application" title="Permalink to this headline">¶</a></h1>
+<p>Because creation of blogposts needs authentication, the user of the ios app
+should be able to login.</p>
+<p>If the creation of a blogpost fails due authentication issues we will present
+a LoginViewController.</p>
+<div class="section" id="the-user-model">
+<h2>The User model<a class="headerlink" href="#the-user-model" title="Permalink to this headline">¶</a></h2>
+<p>As well as for the blogposts we need a representation of the user model.
+Create a new class named User:</p>
+<p>User.h:</p>
+<div class="highlight-python"><pre>#import &lt;Foundation/Foundation.h&gt;
+#import &lt;RestKit/RestKit.h&gt;
+
+@interface User : NSObject
+
+@property (nonatomic, copy) NSString* name;
+@property (nonatomic, copy) NSString* password;
+
++ (RKObjectMapping*)mapping;
+
+@end</pre>
+</div>
+<p>User.m:</p>
+<div class="highlight-python"><pre>#import "User.h"
+
+@implementation User
+
++(RKObjectMapping *)mapping {
+    RKObjectMapping* mapping = [RKObjectMapping mappingForClass:[User class]];
+    [mapping addAttributeMappingsFromDictionary:@{
+                                                  @"name": @"name",
+                                                  @"password": @"password"
+                                                  }];
+    return mapping;
+}
+
+@end</pre>
+</div>
+</div>
+<div class="section" id="update-restkit-setup">
+<h2>Update RestKit Setup<a class="headerlink" href="#update-restkit-setup" title="Permalink to this headline">¶</a></h2>
+<p>For the <cite>login</cite> endpoint we create request and response descriptors as the one
+we created for the <cite>blogposts</cite> endpoint:</p>
+<div class="highlight-python"><pre>RKRequestDescriptor* loginRequest = [RKRequestDescriptor requestDescriptorWithMapping:[[User mapping] inverseMapping]
+                                                                          objectClass:[User class]
+                                                                          rootKeyPath:nil
+                                                                               method:RKRequestMethodPOST];
+RKObjectMapping * emptyMapping = [RKObjectMapping mappingForClass:[NSObject class]];
+RKResponseDescriptor* loginResponse = [RKResponseDescriptor responseDescriptorWithMapping:emptyMapping
+                                                                                   method:RKRequestMethodPOST
+                                                                              pathPattern:@"/users/login"
+                                                                                  keyPath:nil
+                                                                              statusCodes:statusCodes];
+[manager addResponseDescriptorsFromArray:@[blogPostGetResponse, blogPostPostResponse, loginResponse]];
+[manager addRequestDescriptorsFromArray:@[blogPostPostRequest, loginRequest]];</pre>
+</div>
+<p>In contrast to the other response descriptors we use an empty mapping for the
+login response.
+The returned status code is sufficient to see if the login succeeded or not, so
+we can ignore the response body.</p>
+</div>
+<div class="section" id="the-view">
+<h2>The View<a class="headerlink" href="#the-view" title="Permalink to this headline">¶</a></h2>
+<p>For the login we present a view which contains:</p>
+<blockquote>
+<div><ul class="simple">
+<li>an UITextField for the name</li>
+<li>an UITextField for the password</li>
+<li>an UILabel to show errors</li>
+</ul>
+</div></blockquote>
+<p>This is the interface of the view:</p>
+<div class="highlight-python"><pre>#import &lt;UIKit/UIKit.h&gt;
+
+@interface LoginView : UIView
+
+@property (nonatomic, strong) UITextField* name;
+@property (nonatomic, strong) UITextField* password;
+@property (nonatomic, strong) UILabel* errorLabel;
+
+-(void)showError:(NSString*)error;
+
+@end</pre>
+</div>
+<p><a class="reference external" href="https://github.com/lovelysystems/lovely.microblog/blob/master/frontend-ios/microblog/microblog/user/LoginView.m">Here</a> you find a possible implementation for the view.</p>
+</div>
+<div class="section" id="the-view-controller">
+<h2>The View Controller<a class="headerlink" href="#the-view-controller" title="Permalink to this headline">¶</a></h2>
+<p>LoginViewController.h:</p>
+<div class="highlight-python"><pre>#import &lt;UIKit/UIKit.h&gt;
+
+@protocol LoginViewControllerDelegate;
+
+@interface LoginViewController : UIViewController
+
+@property (nonatomic, weak)id&lt;LoginViewControllerDelegate&gt; delegate;
+
+@end
+
+@protocol LoginViewControllerDelegate &lt;NSObject&gt;
+
+-(void)loginViewController:(LoginViewController*)loginViewController didFinishWithLogin:(BOOL)loggedIn;
+
+@end</pre>
+</div>
+<p>LoginViewController.m:</p>
+<div class="highlight-python"><pre>#import &lt;RestKit/RestKit.h&gt;
+#import "LoginViewController.h"
+#import "LoginView.h"
+#import "User.h"
+
+@interface LoginViewController ()
+
+- (void)cancel:(id)sender;
+- (void)login:(id)sender;
+
+@end
+
+@implementation LoginViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.navigationItem.title = @"Login";
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                                 style:UIBarButtonItemStylePlain
+                                                                                target:self
+                                                                                action:@selector(cancel:)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Login"
+                                                                                  style:UIBarButtonItemStyleDone
+                                                                                 target:self
+                                                                                 action:@selector(login:)];
+    }
+    return self;
+}
+
+- (void)loadView {
+    LoginView* loginView = [[LoginView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+    self.view = loginView;
+}
+
+- (void)login:(id)sender {
+    LoginView* view = (LoginView*)self.view;
+    User* user = [[User alloc] init];
+    user.name = [[view name] text];
+    user.password = [[view password] text];
+    [[RKObjectManager sharedManager] postObject:user
+                                           path:@"/users/login"
+                                     parameters:Nil
+                                        success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                            [self.delegate loginViewController:self didFinishWithLogin:YES];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        if(operation.HTTPRequestOperation.response.statusCode == 401){
+            [view showError:@"You have entered an invalid username or password"];
+        } else {
+            [view showError:@"An error occured, please try again later"];
+        }
+    }];
+
+}
+
+- (void)cancel:(id)sender {
+    [self.delegate loginViewController:self didFinishWithLogin:NO];
+}
+
+@end</pre>
+</div>
+<div class="section" id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h3>
+<p>The initialization code creates two navigation bar buttons.
+One for login and one for cancel.</p>
+</div>
+<div class="section" id="login">
+<h3>login<a class="headerlink" href="#login" title="Permalink to this headline">¶</a></h3>
+<p>We create an user object with the values of the textfields. Then the user object
+is posted to <cite>/users/login</cite>.
+If everything is ok we send a message to the delegate that the login was
+successful.</p>
+<p>It&#8217;s not necessary to handle the authentication cookie because restkit does that.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you want to persist the cookie you can extract them from the shared
+<a class="reference external" href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSHTTPCookieStorage_Class/Reference/Reference.html">NSHTTPCookieStorage</a>
+and persist it with <a class="reference external" href="https://developer.apple.com/library/mac/documentation/cocoa/Conceptual/CoreData/cdProgrammingGuide.html">CoreData</a>
+or <a class="reference external" href="https://developer.apple.com/library/ios/documentation/cocoa/reference/foundation/Classes/NSKeyedArchiver_Class/Reference/Reference.html">NSKeyedArchiver</a>.</p>
+</div>
+<p>Within the <cite>failure</cite> block we show an appropriate error message.</p>
+</div>
+</div>
+<div class="section" id="present-the-login-view">
+<h2>Present the Login View<a class="headerlink" href="#present-the-login-view" title="Permalink to this headline">¶</a></h2>
+<p>If creating fails with a <cite>403 Forbidden</cite> status code we present
+the login view.
+So edit the <cite>failure</cite> block within the <cite>sendPost:</cite> method:</p>
+<div class="highlight-python"><pre>failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        if(operation.HTTPRequestOperation.response.statusCode == 403){
+            LoginViewController* loginViewController = [[LoginViewController alloc] initWithNibName:nil
+                                                                                             bundle:nil];
+            [loginViewController setDelegate:self];
+            UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+            [self presentViewController:navigationController
+                               animated:YES
+                             completion:nil];
+        }
+         [(CreateBlogPostView*)self.view showError:@"An error occured, please try again later."];
+     }</pre>
+</div>
+<p>Edit the <cite>CreateBlogPostViewController</cite> interface declaration in
+<cite>CreateBlogPostViewController.h</cite> so it conforms to the
+<cite>LoginViewControllerDelegate</cite> protocol:</p>
+<div class="highlight-python"><pre>@interface CreateBlogPostViewController : UIViewController &lt;UITextViewDelegate, LoginViewControllerDelegate&gt;</pre>
+</div>
+<p>Of course the protocol methods must be implemented. If <cite>didFinishWithLogin</cite>
+is called we dismiss the LoginViewController. If the user did login
+successfully we send the blogpost again:</p>
+<div class="highlight-python"><pre>- (void)loginViewController:(LoginViewController *)loginViewController didFinishWithLogin:(BOOL)loggedIn {
+    [self dismissViewControllerAnimated:YES completion:^(){
+        if(loggedIn){
+            [self sendPost:nil];
+        }
+    }];
+}</pre>
+</div>
+</div>
+<div class="section" id="start-the-app">
+<h2>Start the App<a class="headerlink" href="#start-the-app" title="Permalink to this headline">¶</a></h2>
+<p>If you try to create a new post the LoginView appears after sending the post.
+After a successful login you don&#8217;t have to login again until you restart the app.</p>
+<blockquote>
+<div><img alt="_images/ios_login.png" src="_images/ios_login.png" />
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Login within the iOS application</a><ul>
+<li><a class="reference internal" href="#the-user-model">The User model</a></li>
+<li><a class="reference internal" href="#update-restkit-setup">Update RestKit Setup</a></li>
+<li><a class="reference internal" href="#the-view">The View</a></li>
+<li><a class="reference internal" href="#the-view-controller">The View Controller</a><ul>
+<li><a class="reference internal" href="#initialization">Initialization</a></li>
+<li><a class="reference internal" href="#login">login</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#present-the-login-view">Present the Login View</a></li>
+<li><a class="reference internal" href="#start-the-app">Start the App</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="be_authentication.html"
+                        title="previous chapter">Authentication</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="be_authentication.html" title="Authentication"
+             >previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Lovely Systems.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

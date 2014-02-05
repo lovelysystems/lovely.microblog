@@ -1,0 +1,450 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Use the API within an iOS application &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
+    <link rel="next" title="Create new Posts in Frontend" href="frontend_create_post.html" />
+    <link rel="prev" title="Create Blogposts" href="create_blogposts.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="frontend_create_post.html" title="Create new Posts in Frontend"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="create_blogposts.html" title="Create Blogposts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="use-the-api-within-an-ios-application">
+<h1>Use the API within an iOS application<a class="headerlink" href="#use-the-api-within-an-ios-application" title="Permalink to this headline">¶</a></h1>
+<p>Previously we build a working backend for our microblogging application.
+It&#8217;s time to create an iOS application which uses the API.</p>
+<div class="section" id="create-the-application">
+<h2>Create the Application<a class="headerlink" href="#create-the-application" title="Permalink to this headline">¶</a></h2>
+<p>Start XCode and create a new Project. Choose the &#8220;Empty Application&#8221; template
+and name the application <cite>microblog</cite>.</p>
+<p>For interacting with the API we will use <a class="reference external" href="http://restkit.org">RestKit</a>.
+For the sake of convenience we will use
+<a class="reference external" href="http://cocoapods.org">CocoaPods</a> as dependency manager.</p>
+<p>This is what the Podfile looks like:</p>
+<div class="highlight-python"><pre>platform :ios, '7.0'
+pod 'RestKit', '~&gt;  0.20.0'
+link_with 'microblog'</pre>
+</div>
+<p>To fetch the dependencies close XCode and run:</p>
+<div class="highlight-python"><pre>$sh pod install</pre>
+</div>
+<p>Then open the workspace:</p>
+<div class="highlight-python"><pre>$sh open microblog.xcworkspace</pre>
+</div>
+</div>
+<div class="section" id="the-timelineviewcontroller">
+<h2>The TimelineViewController<a class="headerlink" href="#the-timelineviewcontroller" title="Permalink to this headline">¶</a></h2>
+<p>We want to present the created blogposts in a UITableView.</p>
+<p>Create a Controller named <cite>TimelineViewController</cite> which inherits from
+UITableViewController.
+This is what the controller looks like:</p>
+<p>TimelineViewController.h:</p>
+<div class="highlight-python"><pre>#import &lt;UIKit/UIKit.h&gt;
+
+@interface TimelineViewController : UITableViewController
+
+@end</pre>
+</div>
+<p>TimelineViewController.m:</p>
+<div class="highlight-python"><pre>#import "TimelineViewController.h"
+
+@implementation TimelineViewController
+
+- (id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if(self){
+        self.title = @"Timeline";
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
+
+@end</pre>
+</div>
+<p>In the AppDelegate we have to modify the
+<cite>application: didFinishLaunchingWithOptions:</cite> method to instantiate a
+TimeLineViewController, which we use as rootViewController:</p>
+<div class="highlight-python"><pre>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    // instantiate a TimeLineViewController and use it as rootViewController
+    TimelineViewController* timeLineViewController = [[TimelineViewController alloc] initWithStyle:UITableViewStylePlain];
+    UINavigationController* timeLineNavigationController = [[UINavigationController alloc] initWithRootViewController:timeLineViewController];
+    self.window.rootViewController = timeLineNavigationController;
+
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    return YES;
+}</pre>
+</div>
+<p>Add the missing import:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#import &quot;TimelineViewController.h&quot;</span>
+</pre></div>
+</div>
+<p>So we have an app which presents the empty <cite>TimelineViewController</cite> within a
+navigationController.</p>
+</div>
+<div class="section" id="the-blogpost-model">
+<h2>The BlogPost Model<a class="headerlink" href="#the-blogpost-model" title="Permalink to this headline">¶</a></h2>
+<p>As in the backend we need a representation of the BlogPost model.
+Create a new class which inherits from NSObject, named BlogPost.</p>
+<p>BlogPost.h:</p>
+<div class="highlight-python"><pre>#import &lt;Foundation/Foundation.h&gt;
+#import &lt;RestKit/RestKit.h&gt;
+
+@interface BlogPost : NSObject
+
+@property(nonatomic, copy) NSString* blogPostId;
+@property(nonatomic, copy) NSDate* created;
+@property(nonatomic, copy) NSString* text;
+@property(nonatomic, copy) NSString* creator;
+
+-(NSString*)formattedDate;
++(RKObjectMapping *)mapping;
+
+@end</pre>
+</div>
+<p>BlogPost.m:</p>
+<div class="highlight-python"><pre>#import "BlogPost.h"
+
+@implementation BlogPost
+
++(RKObjectMapping*)mapping {
+    RKObjectMapping* mapping = [RKObjectMapping mappingForClass:[BlogPost class]];
+    [mapping addAttributeMappingsFromDictionary:@{@"id": @"blogPostId",
+                                                  @"created": @"created",
+                                                  @"text": @"text",
+                                                  @"creator": @"creator"
+                                                  }];
+    return mapping;
+}
+
+-(NSString*)formattedDate {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setDoesRelativeDateFormatting:YES];
+    return [dateFormatter stringFromDate:self.created];
+}
+@end</pre>
+</div>
+<div class="section" id="blogpost-interface">
+<h3>BlogPost interface<a class="headerlink" href="#blogpost-interface" title="Permalink to this headline">¶</a></h3>
+<p>The interface defines all the properties a blogPost have. Because <cite>id</cite> is a
+reserved keyword we name it blogPostId here.</p>
+</div>
+<div class="section" id="blogpost-implementation">
+<h3>BlogPost implementation<a class="headerlink" href="#blogpost-implementation" title="Permalink to this headline">¶</a></h3>
+<p>We implement the two methods declared in the interface.</p>
+<p>The <cite>mapping</cite> defines how RestKit should map the JSON data returned from the
+API. For Details about Mapping see:
+<a class="reference external" href="https://github.com/RestKit/RestKit/wiki/Object-mapping">Object Mapping</a></p>
+<p>The <cite>formattedDate</cite> method returns a string representation of the <cite>created</cite>
+property. Later we will use that for the view representation of the posts.</p>
+</div>
+</div>
+<div class="section" id="setup-restkit">
+<h2>Setup RestKit<a class="headerlink" href="#setup-restkit" title="Permalink to this headline">¶</a></h2>
+<p>Before we can fetch the data from our API, we have to setup RestKit. So create
+<cite>setUpRestKit</cite> method in the AppDelegate:</p>
+<div class="highlight-python"><pre>- (void)setUpRestKit {
+    NSURL* url = [NSURL URLWithString:@"http://localhost:9210"];
+    RKObjectManager* manager = [RKObjectManager managerWithBaseURL:url];
+    [manager.HTTPClient setParameterEncoding:AFJSONParameterEncoding];
+    [manager setRequestSerializationMIMEType:RKMIMETypeJSON];
+
+    NSIndexSet* statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    RKResponseDescriptor* blogPostGetResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
+                                                                                             method:RKRequestMethodGET
+                                                                                        pathPattern:@"/blogposts"
+                                                                                            keyPath:@"data.blogposts"
+                                                                                        statusCodes:statusCodes];
+
+    [manager addResponseDescriptorsFromArray:@[blogPostGetResponse]];
+    [RKObjectManager setSharedManager:manager];
+}</pre>
+</div>
+<p>Within the first four lines we setup a RKObjectManager with the base url
+of the backend. We also define that the manager sends json and interprets
+the response data as json.</p>
+<p>The ResponseDescriptor defines that the <cite>/blogposts</cite> endpoint should return
+a 200 OK status when a GET request gets performed. The returned json contains
+a data object with a blogposts list (KeyPath: data.blogposts). Every object in
+this list should be deserialized as <cite>BlogPost</cite> object using the
+[BlogPost mapping] we defined earlier.</p>
+<p>Of course you have to call the <cite>setUpRestKit</cite> method at app launch:</p>
+<div class="highlight-python"><pre>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [self setUpRestKit];
+    ...</pre>
+</div>
+</div>
+<div class="section" id="fill-the-timeline">
+<h2>Fill the Timeline<a class="headerlink" href="#fill-the-timeline" title="Permalink to this headline">¶</a></h2>
+<p>To show the created posts in the timline, edit the <cite>TimeLineViewController</cite>:</p>
+<div class="highlight-python"><pre>@interface TimelineViewController ()
+
+@property(nonatomic, strong)NSArray* blogPosts;
+
+@end
+
+@implementation TimelineViewController
+
+- (id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if(self){
+        self.title = @"Timeline";
+        self.blogPosts = @[];
+    }
+    return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self refresh:nil];
+}
+
+- (void)refresh:(id)sender {
+    [[RKObjectManager sharedManager] getObjectsAtPath:@"/blogposts"
+                                           parameters:nil
+                                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                  self.blogPosts = [mappingResult array];
+                                                  [self.tableView reloadData];
+                                              } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                  // TODO: handle the errors
+                                              }];
+}
+
+# pragma mark - TableView
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [self.blogPosts count];
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"TimelineTableViewCell";
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if( cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
+    // Configure the cell to show the blogpost text
+    BlogPost* blogPost = [self.blogPosts objectAtIndex:indexPath.row];
+    [[cell textLabel] setText:blogPost.text];
+    return cell;
+}</pre>
+</div>
+<div class="section" id="tableview">
+<h3>TableView<a class="headerlink" href="#tableview" title="Permalink to this headline">¶</a></h3>
+<p>Everything below the <cite>TableView</cite> mark is standard TableView handling. For details see
+<a class="reference external" href="hhttps://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/TableView_iPhone/AboutTableViewsiPhone/AboutTableViewsiPhone.html">About Table Views in iOS Apps</a></p>
+</div>
+<div class="section" id="refresh">
+<h3>Refresh<a class="headerlink" href="#refresh" title="Permalink to this headline">¶</a></h3>
+<p>Within the refresh method we use RestKit to fetch all objects at <cite>/blogposts</cite>.
+Because RestKit is configured to map the results of <cite>/blogposts</cite> as BlogPost
+models, we just have to assign the mapped results to <cite>self.blogPosts</cite> and to
+reload the <cite>TableView</cite>.</p>
+<p>If you start the backend and the ios app, you should see the created blogposts.</p>
+<blockquote>
+<div><img alt="_images/ios_list_posts_1.png" src="_images/ios_list_posts_1.png" />
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="blogpost-cell">
+<h2>Blogpost cell<a class="headerlink" href="#blogpost-cell" title="Permalink to this headline">¶</a></h2>
+<p>Because the <cite>UITableViewCell</cite> clips large texts and we want the cells to show
+the date and creator of the blogpost, we create our own <cite>BlogPostTableViewCell</cite>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://github.com/lovelysystems/lovely.microblog/blob/master/frontend-ios/microblog/microblog/timeline/BlogPostTableViewCell.h">BlogPostTableViewCell.h</a></li>
+<li><a class="reference external" href="https://github.com/lovelysystems/lovely.microblog/blob/master/frontend-ios/microblog/microblog/timeline/BlogPostTableViewCell.m">BlogPostTableViewCell.m</a></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You don&#8217;t have to create the view programmatically, if you prefer
+to use Inteface Builder.</p>
+</div>
+<p>After adding them to the project, you have to update the <cite>cellForRowAtindexPath</cite>
+method:</p>
+<div class="highlight-python"><pre>- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"TimelineTableViewCell";
+    BlogPostTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if( cell == nil){
+        cell = [[BlogPostTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
+    BlogPost* blogPost = [self.blogPosts objectAtIndex:indexPath.row];
+    [cell setBlogPost:blogPost];
+    return cell;
+}</pre>
+</div>
+<p>Also implement the <cite>heightForRowAtIndexPath</cite> method, defined in the UITableView
+delegate:</p>
+<div class="highlight-python"><pre>- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return [BlogPostTableViewCell heightForBlogPost:[self.blogPosts objectAtIndex:indexPath.row]];
+}</pre>
+</div>
+<p>This is what the app looks like:</p>
+<blockquote>
+<div><img alt="_images/ios_list_posts_2.png" src="_images/ios_list_posts_2.png" />
+</div></blockquote>
+</div>
+<div class="section" id="pull-to-refresh">
+<h2>Pull to Refresh<a class="headerlink" href="#pull-to-refresh" title="Permalink to this headline">¶</a></h2>
+<p>To implement <cite>Pull to Refresh</cite> just add a <cite>UIRefreshControl</cite> in <cite>viewDidLoad</cite>,
+which calls the refresh method:</p>
+<div class="highlight-python"><pre>- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self
+                            action:@selector(refresh:)
+                  forControlEvents:UIControlEventValueChanged];
+}</pre>
+</div>
+<p>It&#8217;s also necessary to end refreshing after the data is loaded. So add the the
+following line to the <cite>success</cite> and <cite>failure</cite> blocks located in the refresh
+method:</p>
+<div class="highlight-python"><pre>[self.refreshControl endRefreshing];</pre>
+</div>
+<p>So the success block looks like:</p>
+<div class="highlight-python"><pre>success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+    self.blogPosts = [mappingResult array];
+    [self.tableView reloadData];
+    [self.refreshControl endRefreshing];
+}</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Use the API within an iOS application</a><ul>
+<li><a class="reference internal" href="#create-the-application">Create the Application</a></li>
+<li><a class="reference internal" href="#the-timelineviewcontroller">The TimelineViewController</a></li>
+<li><a class="reference internal" href="#the-blogpost-model">The BlogPost Model</a><ul>
+<li><a class="reference internal" href="#blogpost-interface">BlogPost interface</a></li>
+<li><a class="reference internal" href="#blogpost-implementation">BlogPost implementation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setup-restkit">Setup RestKit</a></li>
+<li><a class="reference internal" href="#fill-the-timeline">Fill the Timeline</a><ul>
+<li><a class="reference internal" href="#tableview">TableView</a></li>
+<li><a class="reference internal" href="#refresh">Refresh</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#blogpost-cell">Blogpost cell</a></li>
+<li><a class="reference internal" href="#pull-to-refresh">Pull to Refresh</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="create_blogposts.html"
+                        title="previous chapter">Create Blogposts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="frontend_create_post.html"
+                        title="next chapter">Create new Posts in Frontend</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="frontend_create_post.html" title="Create new Posts in Frontend"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="create_blogposts.html" title="Create Blogposts"
+             >previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Lovely Systems.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

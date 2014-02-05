@@ -1,0 +1,323 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Create new Posts in Frontend &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
+    <link rel="next" title="Authentication" href="be_authentication.html" />
+    <link rel="prev" title="Use the API within an iOS application" href="frontend_blogposts.html" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head>
+  <body>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="be_authentication.html" title="Authentication"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="frontend_blogposts.html" title="Use the API within an iOS application"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="create-new-posts-in-frontend">
+<h1>Create new Posts in Frontend<a class="headerlink" href="#create-new-posts-in-frontend" title="Permalink to this headline">¶</a></h1>
+<p>In the last chapter we created an ios app which shows all the blogposts.
+Now let&#8217;s see how we use the API to create new blogposts.</p>
+<div class="section" id="update-restkit-setup">
+<h2>Update RestKit setUp<a class="headerlink" href="#update-restkit-setup" title="Permalink to this headline">¶</a></h2>
+<p>First of all define how RestKit should post <cite>BlogPosts</cite> and how the response
+data should be deserialized.
+So add a response and a request descriptor for POST Requests to <cite>/blogposts</cite> in
+the <cite>setUpRestKit</cite> method, which we defined earliear in the AppDelegate:</p>
+<div class="highlight-python"><pre>RKResponseDescriptor* blogPostPostResponse = [RKResponseDescriptor responseDescriptorWithMapping:[BlogPost mapping]
+                                                                                method:RKRequestMethodPOST
+                                                                           pathPattern:@"/blogposts"
+                                                                               keyPath:nil
+                                                                           statusCodes:statusCodes];
+
+RKRequestDescriptor* blogPostPostRequest = [RKRequestDescriptor requestDescriptorWithMapping:[[BlogPost mapping] inverseMapping]
+                                                                                 objectClass:[BlogPost class]
+                                                                                 rootKeyPath:nil
+                                                                                      method:RKRequestMethodPOST];
+[manager addResponseDescriptorsFromArray:@[blogPostGetResponse, blogPostPostResponse]];
+[manager addRequestDescriptor:blogPostPostRequest];</pre>
+</div>
+<div class="section" id="response-descriptor">
+<h3>Response Descriptor<a class="headerlink" href="#response-descriptor" title="Permalink to this headline">¶</a></h3>
+<p>To create a new blogpost a BlogPost object must be posted to the
+<cite>/blogposts</cite> endpoint. The returned data is the created blogpost in json format.
+So the response descriptor looks like the response descriptor we used for the
+GET request, but we don&#8217;t configure a keyPath, because the returned blogpost
+is not nested in <cite>data.blogposts</cite>.</p>
+</div>
+<div class="section" id="request-descriptor">
+<h3>Request Descriptor<a class="headerlink" href="#request-descriptor" title="Permalink to this headline">¶</a></h3>
+<p>The request descriptor defines that the inverse blogpost mapping is used if
+a <cite>BlogPost</cite> object is posted to any endpoint.</p>
+</div>
+</div>
+<div class="section" id="the-view">
+<h2>The View<a class="headerlink" href="#the-view" title="Permalink to this headline">¶</a></h2>
+<p>To create a new BlogPost we will show a modal view with an <cite>UITextView</cite> and
+a hideable errorLabel.</p>
+<p>This is the interface:</p>
+<div class="highlight-python"><pre>#import &lt;UIKit/UIKit.h&gt;
+
+@interface CreateBlogPostView : UIView
+
+@property(nonatomic, strong)UITextView* textView;
+
+-(void)showError:(NSString*)error;
+-(void)hideError;
+
+@end</pre>
+</div>
+<p><a class="reference external" href="https://github.com/lovelysystems/lovely.microblog/blob/master/frontend-ios/microblog/microblog/timeline/CreateBlogPostView.m">Here</a> you find a possible implementation for the view.</p>
+</div>
+<div class="section" id="the-view-controller">
+<h2>The View Controller<a class="headerlink" href="#the-view-controller" title="Permalink to this headline">¶</a></h2>
+<p>CreateBlogPostViewController.h:</p>
+<div class="highlight-python"><pre>#import &lt;UIKit/UIKit.h&gt;
+
+@protocol CreateBlogPostDelegate;
+
+@interface CreateBlogPostViewController : UIViewController &lt;UITextViewDelegate&gt;
+
+@property (nonatomic, weak) id&lt;CreateBlogPostDelegate&gt; delegate;
+
+@end
+
+@protocol CreateBlogPostDelegate &lt;NSObject&gt;
+
+- (void)dismissCreateBlogPost;
+
+@end</pre>
+</div>
+<p>CreateBlogPostViewController.m:</p>
+<div class="highlight-python"><pre>@interface CreateBlogPostViewController ()
+
+- (void)sendPost:(id)sender;
+- (void)dismiss:(id)sender;
+
+@end
+
+@implementation CreateBlogPostViewController
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // this is necessary for ios 7, else editing would start in the middle of
+        // the textView
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        self.navigationItem.title = @"New Post";
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Send"
+                                                                                  style:UIBarButtonItemStyleDone
+                                                                                 target:self
+                                                                                 action:@selector(sendPost:)];
+
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel"
+                                                                                 style:UIBarButtonItemStylePlain
+                                                                                target:self
+                                                                                action:@selector(dismiss:)];
+        [self.navigationItem.rightBarButtonItem setEnabled:NO];
+    }
+    return self;
+}
+
+- (void)loadView {
+    CreateBlogPostView* createBlogPostView = [[CreateBlogPostView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+    [createBlogPostView.textView setDelegate:self];
+    self.view = createBlogPostView;
+}
+
+- (void)sendPost:(id)sender {
+    BlogPost* post = [[BlogPost alloc] init];
+    post.text = [(CreateBlogPostView*)self.view textView].text;
+    [[RKObjectManager sharedManager] postObject:post
+                                           path:@"/blogposts"
+                                     parameters:nil
+                                        success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                            [self dismiss:nil];
+    } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+        [(CreateBlogPostView*)self.view showError:@"An error occured, please try again later."];
+    }];
+
+}
+
+-(void)textViewDidChange:(UITextView *)textView {
+    [self.navigationItem.rightBarButtonItem setEnabled:textView.text.length &gt; 0];
+}
+
+- (void)dismiss:(id)sender {
+    [self.delegate dismissCreateBlogPost];
+}
+
+@end</pre>
+</div>
+<div class="section" id="createblogpostdelegate">
+<h3>CreateBlogPostDelegate<a class="headerlink" href="#createblogpostdelegate" title="Permalink to this headline">¶</a></h3>
+<p>Because the <cite>CreateBlogPostViewController</cite> will be presented modal, we define
+an interface with a method to dismiss the controller. The delegate has to
+implement that.</p>
+</div>
+<div class="section" id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h3>
+<p>The initialization code, just adds two buttons to the navigation Bar.
+We disable the <cite>Send</cite> button because the <cite>textView</cite> is empty at start and we
+don&#8217;t want the user to send an empty post.</p>
+</div>
+<div class="section" id="load-view">
+<h3>Load View<a class="headerlink" href="#load-view" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>loadView</cite> initializes the <cite>view</cite> and sets the controller itself as the
+textViews delegate, so the controller realizes if the text changes and is able
+to enable the sendbutton, if the textView is not empty anymore
+(textViewDidChange).</p>
+</div>
+<div class="section" id="send-post">
+<h3>Send Post<a class="headerlink" href="#send-post" title="Permalink to this headline">¶</a></h3>
+<p>Within the <cite>sendPost</cite> method a <cite>BlogPost</cite> is created and the textViews&#8217;s text
+is assigned as text property.
+Then the created object is sent to the <cite>/blogposts</cite> endpoint. If something
+goes wrong, the views <cite>showError:</cite> method is used to show an error message, else
+the controller is dismissed.</p>
+</div>
+</div>
+<div class="section" id="present-the-viewcontroller">
+<h2>Present the ViewController<a class="headerlink" href="#present-the-viewcontroller" title="Permalink to this headline">¶</a></h2>
+<p>Open the <cite>TimeLineViewController</cite> and add two methods
+to present and dismiss the controller:</p>
+<div class="highlight-python"><pre>- (void)createNewBlogPost:(id)sender {
+    CreateBlogPostViewController* blogPostController = [[CreateBlogPostViewController alloc] initWithNibName:nil bundle:nil];
+    [blogPostController setDelegate:self];
+    UINavigationController* blogPostNavigationController = [[UINavigationController alloc] initWithRootViewController:blogPostController];
+    [self presentViewController:blogPostNavigationController animated:YES completion:nil];
+}
+
+- (void)dismissCreateBlogPost {
+    [self refresh:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}</pre>
+</div>
+<p>Also add an <cite>UIBarButton</cite> to the navigationItem:</p>
+<div class="highlight-python"><pre>self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New Post"
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self
+                                                                         action:@selector(createNewBlogPost:)];</pre>
+</div>
+<p>Start the app and you are able to create blogposts.</p>
+<blockquote>
+<div><img alt="_images/ios_create_blogpost.png" src="_images/ios_create_blogpost.png" />
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Create new Posts in Frontend</a><ul>
+<li><a class="reference internal" href="#update-restkit-setup">Update RestKit setUp</a><ul>
+<li><a class="reference internal" href="#response-descriptor">Response Descriptor</a></li>
+<li><a class="reference internal" href="#request-descriptor">Request Descriptor</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-view">The View</a></li>
+<li><a class="reference internal" href="#the-view-controller">The View Controller</a><ul>
+<li><a class="reference internal" href="#createblogpostdelegate">CreateBlogPostDelegate</a></li>
+<li><a class="reference internal" href="#initialization">Initialization</a></li>
+<li><a class="reference internal" href="#load-view">Load View</a></li>
+<li><a class="reference internal" href="#send-post">Send Post</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#present-the-viewcontroller">Present the ViewController</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="frontend_blogposts.html"
+                        title="previous chapter">Use the API within an iOS application</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="be_authentication.html"
+                        title="next chapter">Authentication</a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="be_authentication.html" title="Authentication"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="frontend_blogposts.html" title="Use the API within an iOS application"
+             >previous</a> |</li>
+        <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Lovely Systems.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
