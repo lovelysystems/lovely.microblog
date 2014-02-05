@@ -28,7 +28,7 @@ Check the status of the programs::
 
   ./bin/supervisorctl status
 
-  The frontend app is available at http://localhost:8200
+  The app is available at http://localhost:9210
 
 For debugging the Pyramid app can be started in the foreground. Take care to
 stop the apps in the supervisor controller, then run::
