@@ -31,7 +31,7 @@ Setup using the template
 
 Install cookiecutter::
 
-    sh$ pip install cookiecutter
+    sh$ pip install https://download.lovelysystems.com/public/cookiecutter-0.7.0-conditional.tar.gz
 
 Create the microblog project::
 
