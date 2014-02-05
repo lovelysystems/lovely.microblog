@@ -3,7 +3,7 @@ Login within the iOS application
 ================================
 
 Because creation of blogposts needs authentication, the user of the iOS app
-should be able to login.
+will be able to login.
 
 If the creation of a blogpost fails due authentication issues we will present
 a LoginViewController.
@@ -240,8 +240,9 @@ successfully we send the blogpost again::
         }];
     }
 
-Start the App
-=============
+====================
+Test the application
+====================
 
 If you try to create a new post the LoginView appears after sending the post.
 After a successful login you don't have to login again until you restart the app.
