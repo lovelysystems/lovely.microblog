@@ -4,6 +4,17 @@ Lovely Microblog
 
 How to build an iOS app with a scalable web backend
 
+Requirements
+============
+
+The following packages need to be installed::
+
+    brew install python27 libevent
+
+Or with macports::
+
+    sudo port install python27 libevent
+
 Initial Setup for Development
 =============================
 

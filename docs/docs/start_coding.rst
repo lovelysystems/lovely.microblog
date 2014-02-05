@@ -98,7 +98,7 @@ Include the Service
 ===================
 
 Now open the `server.py` file and include and scan the created module. Now the
-`app_factory` method look should something like this::
+`app_factory` method should look something like this::
 
     def app_factory(global_config, **settings):
         """Setup the main application for paste
