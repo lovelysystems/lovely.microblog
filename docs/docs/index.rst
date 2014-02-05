@@ -3,14 +3,13 @@ How to Create high scalable web backends for iOS-Devs
 =====================================================
 
 In this tutorial, we will walk through the creation of a tiny iOs application with
-a high scalable webbackend using:
+a highly scalable webbackend using:
 
    - `Crate <https://crate.io>`_ An SQL and Doc-oriented databse
    - `Lovely Pyrest <http://lovelysystems.github.io/lovely.pyrest/index.html>`_ A Web-Framework on top of `pyramid <http://www.pylonsproject.org/projects/pyramid/about>`_
 
-In this tutorial we will build
-a tiny blogging application, where registered users can create posts which can
-be read by anyone.
+In this tutorial we will build a tiny blogging application, where registered
+users can create posts which can be read by anyone.
 
 Contents:
 ---------
@@ -36,19 +35,20 @@ If you want the sources of the app we create in this tutorial, clone the
 `lovely.microblog` repository.
 
 Cloning the source code installs a copy of the repository on your computer.
-It always requires that you have git installed.
+You should have git installed to do this::
 
     git clone git@github.com:lovelysystems/lovely.microblog.git
 
-The repsority contains three directories:
+The repository contains three directories:
 
     /backend
     /docs
     /frontend
 
-The `/backend` directory contains all the source code for the backend
+The `/backend` directory contains all the sources for the backend
 application and a README file. Follow the instructions in README to setup the app.
 
-The `/frontend` directory contains the final iOS app and the xcode workspace::
+The `/frontend` directory contains sources of the iOS app and the xcode
+workspace::
 
     open frontend-ios/microblog/microblog.xcworkspace
