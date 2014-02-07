@@ -46,18 +46,17 @@ requires = [
     'pyramid',
     'pyramid_jinja2',
     'pyramid_mailer',
-    'pyramid_tm',
-    'zope.sqlalchemy',
     'validictory',
     'python-dateutil',
     'lovely.pyrest',
-
+    'pyramid_tm',
+    'zope.sqlalchemy',
 ]
 
 setup(name='microblog',
       version=VERSION,
       author='Lovely Systems',
-      author_email='hello@lovelysystems.com',
+      author_email='office@lovelysystems.com',
       packages=find_packages(),
       include_package_data=True,
       extras_require=dict(

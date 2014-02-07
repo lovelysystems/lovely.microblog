@@ -24,7 +24,7 @@
 }
 
 - (void)setUpRestKit {
-    RKObjectManager* manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost:9210"]];
+    RKObjectManager* manager = [RKObjectManager managerWithBaseURL:[NSURL URLWithString:@"http://localhost:9100"]];
     [manager.HTTPClient setParameterEncoding:AFJSONParameterEncoding];
     [manager setRequestSerializationMIMEType:RKMIMETypeJSON];
     

@@ -17,7 +17,6 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 [supervisorctl]
 serverurl = http://localhost:${ports:supervisor}
 
-
 [program:crate]
 command = ${crate:location}/bin/crate -f -Des.config=${buildout:directory}/etc/crate.yml -Des.http.port=${ports:crate} -Des.discovery.zen.ping.unicast.hosts=localhost:${ports:crate_t2} -Des.transport.tcp.port=${ports:crate_t}
 priority = 11
@@ -29,7 +28,18 @@ priority = 11
 redirect_stderr=true
 
 [program:app]
-command = ${buildout:bin-directory}/app
+command = ${buildout:bin-directory}/app http_port=${ports:app}
 redirect_stderr=true
 priority = 1
 stopasgroup = true
+
+[program:app2]
+command = ${buildout:bin-directory}/app http_port=${ports:app2}
+redirect_stderr=true
+priority = 2
+stopasgroup = true
+
+[program:haproxy]
+command = ${buildout:parts-directory}/haproxy/sbin/haproxy -f ${buildout:directory}/etc/haproxy.conf
+redirect_stderr=true
+priority = 10

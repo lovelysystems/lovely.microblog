@@ -32,6 +32,8 @@ def app_factory(global_config, **settings):
     config.include('microblog.user.service')
     config.scan('microblog.blogpost')
     config.scan('microblog.user')
+    config.include('microblog.probestatus.view')
+    config.scan('microblog.probestatus')
     crate_init(config)
 
     return config.make_wsgi_app()

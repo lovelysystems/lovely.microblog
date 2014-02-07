@@ -13,18 +13,15 @@ auth.secret = 12345
 
 locale.dirs = ${buildout:directory}/locales
 
-
 crate.hosts = localhost:${ports:crate} localhost:${ports:crate2}
 crate.echo = True
 sql.pool_size = 50
 sql.max_overflow = 50
 es.settings = ${buildout:directory}/etc/essettings.py
 
-
 mail.host = localhost
 mail.port = 25
-mail.default_sender = hello@lovelysystems.com
-mail.min_avalanche_size = 2
+mail.default_sender = office@lovelysystems.com
 
 ###
 # wsgi server configuration
@@ -33,7 +30,7 @@ mail.min_avalanche_size = 2
 [server:main]
 use = egg:microblog#server
 host = 0.0.0.0
-port = ${ports:app}
+port = %(http_port)s
 
 ###
 # logging configuration
