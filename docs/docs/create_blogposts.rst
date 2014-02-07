@@ -33,7 +33,7 @@ Run::
     +-----------------------+-----------+-----------+---------+
     | server_url            | node_name | connected | message |
     +-----------------------+-----------+-----------+---------+
-    | http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
+    | http://127.0.0.1:4200 | Scorpio   | TRUE      | OK      |
     +-----------------------+-----------+-----------+---------+
     CONNECT OK
     CREATE OK (0.083 sec)
@@ -44,7 +44,7 @@ If you want to reset crate run::
     +-----------------------+-----------+-----------+---------+
     | server_url            | node_name | connected | message |
     +-----------------------+-----------+-----------+---------+
-    | http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
+    | http://127.0.0.1:4200 | Scorpio   | TRUE      | OK      |
     +-----------------------+-----------+-----------+---------+
     CONNECT OK
     DROP OK (0.014 sec)
@@ -53,7 +53,7 @@ If you want to reset crate run::
     +-----------------------+-----------+-----------+---------+
     | server_url            | node_name | connected | message |
     +-----------------------+-----------+-----------+---------+
-    | http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
+    | http://127.0.0.1:4200 | Scorpio   | TRUE      | OK      |
     +-----------------------+-----------+-----------+---------+
     CONNECT OK
     CREATE OK (0.083 sec)
@@ -68,7 +68,7 @@ If you want to reset crate run::
 You can open the following url with your browser to
 access the crate admin interface and inspect the created table::
 
-    $sh open http://localhost:9200/admin
+    $sh open http://localhost:4200/admin
 
 BlogPost SQL Alchemy Model
 ==========================

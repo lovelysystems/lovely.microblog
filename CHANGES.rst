@@ -5,6 +5,10 @@ Changes for Lovely Microblog
 unreleased
 ==========
 
+ - added a second crate node to supervisor
+
+ - updated crate to 0.22.2
+
  - improved documentation
 
  - added tutorial for frontend login
