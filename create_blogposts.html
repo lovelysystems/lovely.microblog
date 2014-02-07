@@ -83,7 +83,7 @@ expression:</p>
 +-----------------------+-----------+-----------+---------+
 | server_url            | node_name | connected | message |
 +-----------------------+-----------+-----------+---------+
-| http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
+| http://127.0.0.1:4200 | Scorpio   | TRUE      | OK      |
 +-----------------------+-----------+-----------+---------+
 CONNECT OK
 CREATE OK (0.083 sec)</pre>
@@ -93,7 +93,7 @@ CREATE OK (0.083 sec)</pre>
 +-----------------------+-----------+-----------+---------+
 | server_url            | node_name | connected | message |
 +-----------------------+-----------+-----------+---------+
-| http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
+| http://127.0.0.1:4200 | Scorpio   | TRUE      | OK      |
 +-----------------------+-----------+-----------+---------+
 CONNECT OK
 DROP OK (0.014 sec)
@@ -102,7 +102,7 @@ $sh bin/crate_setup
 +-----------------------+-----------+-----------+---------+
 | server_url            | node_name | connected | message |
 +-----------------------+-----------+-----------+---------+
-| http://127.0.0.1:9200 | Scorpio   | TRUE      | OK      |
+| http://127.0.0.1:4200 | Scorpio   | TRUE      | OK      |
 +-----------------------+-----------+-----------+---------+
 CONNECT OK
 CREATE OK (0.083 sec)</pre>
@@ -116,7 +116,7 @@ and you have to ommit semicolons at the end of the statements.</p>
 </div>
 <p>You can open the following url with your browser to
 access the crate admin interface and inspect the created table:</p>
-<div class="highlight-python"><pre>$sh open http://localhost:9200/admin</pre>
+<div class="highlight-python"><pre>$sh open http://localhost:4200/admin</pre>
 </div>
 </div>
 <div class="section" id="blogpost-sql-alchemy-model">
