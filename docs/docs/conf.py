@@ -1,10 +1,13 @@
 import os
-import re
+# -*- coding: utf-8 -*-
+from lovely.documentation.sphinx_general import *
+
+# homebrew
+if os.path.exists('/usr/local/bin/dot'):
+    os.environ['GRAPHVIZ_DOT'] = '/usr/local/bin/dot'
 
 here = os.path.dirname(__file__)
 project_root = os.path.dirname(here)
-
-extensions = []
 
 VERSION = "0.0.0"
 
@@ -27,4 +30,4 @@ copyright = u'2014, Lovely Systems'
 version = release = VERSION
 exclude_patterns = ['docs.egg-info', 'parts', 'checkouts']
 
-html_theme = 'pyramid'
+html_theme = 'lovelysystems'

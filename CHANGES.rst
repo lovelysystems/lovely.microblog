@@ -5,6 +5,8 @@ Changes for Lovely Microblog
 unreleased
 ==========
 
+ - tutorial: added introduction and information about scalability
+
  - added a second crate node to supervisor
 
  - updated crate to 0.22.2
