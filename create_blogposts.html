@@ -68,9 +68,9 @@
 <li><a class="reference internal" href="#method-body">Method Body</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -317,9 +317,8 @@ database. We perform the flush manually in order to be able to return the
 id of the created model.</p>
 </div>
 </div>
-</div>
 <div class="section" id="test-the-application">
-<h1>Test the application<a class="headerlink" href="#test-the-application" title="Permalink to this headline">¶</a></h1>
+<h2>Test the application<a class="headerlink" href="#test-the-application" title="Permalink to this headline">¶</a></h2>
 <p>Finally, you have a working API where you can add and read blog posts:</p>
 <div class="highlight-python"><pre>$sh curl -XPOST localhost:9210/blogposts -d '{"text":"This is my First Blogpost"}' -H "Content-Type: application/json"
 {"id": "..."}
@@ -337,6 +336,7 @@ $sh curl localhost:9210/blogposts
         ]
     }
 }</pre>
+</div>
 </div>
 </div>
 

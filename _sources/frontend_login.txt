@@ -240,7 +240,6 @@ successfully we send the blogpost again::
         }];
     }
 
-====================
 Test the application
 ====================
 

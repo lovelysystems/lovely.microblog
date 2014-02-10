@@ -66,9 +66,9 @@
 </li>
 <li><a class="reference internal" href="#test-the-app">Test the app</a></li>
 <li><a class="reference internal" href="#restrict-creating-blogposts">Restrict Creating Blogposts</a></li>
+<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
 </ul>
 
   <h4>Previous topic</h4>
@@ -362,9 +362,8 @@ the <cite>create</cite> method so the correct username gets assigned to creator:
 </pre></div>
 </div>
 </div>
-</div>
 <div class="section" id="test-the-application">
-<h1>Test the application<a class="headerlink" href="#test-the-application" title="Permalink to this headline">¶</a></h1>
+<h2>Test the application<a class="headerlink" href="#test-the-application" title="Permalink to this headline">¶</a></h2>
 <p>Restart the app and create a new post:</p>
 <div class="highlight-python"><pre>$sh curl -XPOST localhost:9210/blogposts -H 'Cookie: auth_tkt="&lt;token&gt;"' -d '{"text": "authenticated post"}' -H "Content-Type: application/json"
 
@@ -381,6 +380,7 @@ $sh curl -XGET localhost:9210/blogposts
         ]
     }
 }</pre>
+</div>
 </div>
 </div>
 

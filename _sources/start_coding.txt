@@ -130,7 +130,6 @@ config.scan
 `config.scan(microblog.blogpost)` tells the application to import
 `microblog.blogpost` and to register the RestService internally.
 
-===================
 Run the application
 ===================
 
