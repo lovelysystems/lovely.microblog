@@ -1,10 +1,19 @@
-==========================================================
-How To Create Highly Scalable Web Backends for iOS Devices
-==========================================================
+=============================================================
+How To Create Highly Scalable Web Backends for app Developers
+=============================================================
 
-In this tutorial, we will walk through the creation of a tiny iOs application
+In this document we want to show app developers how they can build highly
+scalable web backends to realize their app ideas.
+There are many tutorials about building backends which will fit your needs
+at the beginning.
+But if your app succeeds the amount of users will grow -- and also your server
+load will. With the higher load the response time of your backend will increase
+dramatically. At this point you want to add some additional machines to
+increase the power of your cluster. But that's not that easy if your datastorage
+is based on a single conventional relational database like mysql.
+
+In this tutorial we will walk through the creation of a tiny iOS application
 with a highly scalable web backend using:
-
 
    - `Crate <https://crate.io>`_ An SQL and doc-oriented database
    - `Lovely Pyrest <http://lovelysystems.github.io/lovely.pyrest/index.html>`_ A web framework on top of `pyramid <http://www.pylonsproject.org/projects/pyramid/about>`_
@@ -27,6 +36,7 @@ Contents:
    frontend_create_post.rst
    be_authentication.rst
    frontend_login.rst
+   scalability_reliability.rst
 
 .. note::
 

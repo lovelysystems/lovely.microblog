@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,9 +8,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>How To Create Highly Scalable Web Backends for iOS Devices &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
+    <title>How To Create Highly Scalable Web Backends for app Developers &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lovelydoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,16 +26,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="#" />
-    <link rel="next" title="Requirements" href="requirements.html" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
-
+    <link rel="next" title="Requirements" href="requirements.html" /> 
   </head>
   <body>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -46,16 +40,58 @@
              accesskey="N">next</a> |</li>
         <li><a href="#">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
 
     <div class="document">
       <div class="documentwrapper">
+        
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How To Create Highly Scalable Web Backends for app Developers</a><ul>
+<li><a class="reference internal" href="#contents">Contents:</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-the-source-code-from-github">Getting the Source Code from Github</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="requirements.html"
+                        title="next chapter">Requirements</a></p>
+    <div id="searchbox">
+      <h3>Quick search</h3>
+        <form class="search" action="search.html" method="get">
+          <div class="searchfield">
+            <input type="text" name="q" />
+            <input type="submit" value="" />
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+        </div>
+      </div>
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="how-to-create-highly-scalable-web-backends-for-ios-devices">
-<h1>How To Create Highly Scalable Web Backends for iOS Devices<a class="headerlink" href="#how-to-create-highly-scalable-web-backends-for-ios-devices" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial, we will walk through the creation of a tiny iOs application
+  <div class="section" id="how-to-create-highly-scalable-web-backends-for-app-developers">
+<h1>How To Create Highly Scalable Web Backends for app Developers<a class="headerlink" href="#how-to-create-highly-scalable-web-backends-for-app-developers" title="Permalink to this headline">¶</a></h1>
+<p>In this document we want to show app developers how they can build highly
+scalable web backends to realize their app ideas.
+There are many tutorials about building backends which will fit your needs
+at the beginning.
+But if your app succeeds the amount of users will grow &#8211; and also your server
+load will. With the higher load the response time of your backend will increase
+dramatically. At this point you want to add some additional machines to
+increase the power of your cluster. But that&#8217;s not that easy if your datastorage
+is based on a single conventional relational database like mysql.</p>
+<p>In this tutorial we will walk through the creation of a tiny iOS application
 with a highly scalable web backend using:</p>
 <blockquote>
 <div><ul class="simple">
@@ -98,6 +134,9 @@ posts which can be read by anyone.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="frontend_login.html#test-the-application">Test the application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scalability_reliability.html">Scalability, Reliability and a Production environment</a><ul class="simple">
+</ul>
+</li>
 </ul>
 </div>
 <div class="admonition note">
@@ -134,37 +173,6 @@ workspace:</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">How To Create Highly Scalable Web Backends for iOS Devices</a><ul>
-<li><a class="reference internal" href="#contents">Contents:</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#getting-the-source-code-from-github">Getting the Source Code from Github</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Next topic</h4>
-  <p class="topless"><a href="requirements.html"
-                        title="next chapter">Requirements</a></p>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

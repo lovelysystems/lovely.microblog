@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -9,7 +10,7 @@
     
     <title>Setup Your First Application &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lovelydoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,16 +27,9 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
     <link rel="next" title="Start Coding" href="start_coding.html" />
-    <link rel="prev" title="Requirements" href="requirements.html" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
-
+    <link rel="prev" title="Requirements" href="requirements.html" /> 
   </head>
   <body>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -50,10 +44,51 @@
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
 
     <div class="document">
       <div class="documentwrapper">
+        
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setup Your First Application</a><ul>
+<li><a class="reference internal" href="#sandboxed-development-setup">Sandboxed Development Setup</a><ul>
+<li><a class="reference internal" href="#project-template">Project Template</a></li>
+<li><a class="reference internal" href="#setup-using-the-template">Setup using the template</a></li>
+<li><a class="reference internal" href="#bootstrap-and-buildout">Bootstrap and buildout</a></li>
+<li><a class="reference internal" href="#haproxy">HAProxy</a></li>
+<li><a class="reference internal" href="#topology">Topology</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#non-sandboxed-development-setup">Non Sandboxed Development Setup</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="requirements.html"
+                        title="previous chapter">Requirements</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="start_coding.html"
+                        title="next chapter">Start Coding</a></p>
+    <div id="searchbox">
+      <h3>Quick search</h3>
+        <form class="search" action="search.html" method="get">
+          <div class="searchfield">
+            <input type="text" name="q" />
+            <input type="submit" value="" />
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+        </div>
+      </div>
         <div class="bodywrapper">
           <div class="body">
             
@@ -168,22 +203,26 @@ supervisord</pre>
 <div class="highlight-python"><pre>sh$ bin/app</pre>
 </div>
 <p>So you can make some requests:</p>
-<div class="highlight-python"><pre>sh$ curl -XGET localhost:9210
-&lt;html&gt;
-    ...
-    &lt;title&gt;404 Not Found&lt;/title&gt;
-...</pre>
+<div class="highlight-python"><pre>sh$ curl -XGET localhost:9210/probe_status
+OK</pre>
 </div>
-<p>The supervisord script starts the app and crate in background. You have to cancel
-the app script first by pressing ^CTRL + C else supervisord can&#8217;t start the app
-because the port is already in use:</p>
+<p>The supervisord script starts two instances of the app (ports: 9210, 9211) and two
+instances of crate (ports: 4200, 4201) in the background.
+You have to cancel the app script first by pressing ^CTRL + C else supervisord can&#8217;t
+start the first app instance because the port is already in use:</p>
 <div class="highlight-python"><pre>sh$ bin/supervisord
 sh$ bin/supervisorctl status
-app                              RUNNING ...
-crate                            RUNNING ...</pre>
+app:app_9210                     RUNNING ...
+app2:app_9211                    RUNNING ...
+crate:crate_4200                 RUNNING ...
+crate2:crate_4201                RUNNING ...
+haproxy                          RUNNING ...</pre>
 </div>
-<p>To stop the app or crate run:</p>
-<div class="highlight-python"><pre>sh$ bin/supervisorctl stop app</pre>
+<p>To stop an app or a crate instance run:</p>
+<div class="highlight-python"><pre>sh$ bin/supervisorctl stop app:app_9210</pre>
+</div>
+<p>To stop all app or crate instances run:</p>
+<div class="highlight-python"><pre>sh$ bin/supervisorctl stop "crate:*"</pre>
 </div>
 <p>During development you have to restart the app frequently. It&#8217;s more convinient
 to use the supervisor just for crate. The app script should be started in
@@ -196,6 +235,69 @@ sh$ bin/app</pre>
 </div>
 <p>To restart the app stop the script by pressing ^CTRL + C and start it again:</p>
 <div class="highlight-python"><pre>sh$ bin/app</pre>
+</div>
+</div>
+<div class="section" id="haproxy">
+<h3>HAProxy<a class="headerlink" href="#haproxy" title="Permalink to this headline">¶</a></h3>
+<p>An <a class="reference external" href="http://haproxy.1wt.eu">haproxy</a> instance is also started by supervisord.
+HAProxy is a reliable, high performance TCP/HTTP load balancer. It&#8217;s configured
+to listen on port 9100 and it load balances requests between the
+app instances:</p>
+<div class="highlight-python"><pre>sh$ curl -XGET localhost:9100/probe_status
+OK</pre>
+</div>
+<p>HAProxy periodically checks the health state of the app servers by requesting
+<cite>/probe_status</cite>. If an instance is not reachable anymore, haproxy won&#8217;t pass
+requests to it.</p>
+</div>
+<div class="section" id="topology">
+<h3>Topology<a class="headerlink" href="#topology" title="Permalink to this headline">¶</a></h3>
+<p>The local topology of the individual services looks as follows:</p>
+<p class="plantuml">
+<img src="_images/plantuml-208a66cd7de140a9ba6d65a7b9278b7baf6c58a5.png" alt="package &quot;localhost&quot; {
+    [haproxy - 9100] as ha1
+    [app - 9210] as ap1
+    [crate - 4200] as cr1
+
+    [app - 9211] as ap2
+    [crate - 4201] as cr2
+
+}
+
+ha1 --&gt; ap1
+ha1 --&gt; ap2
+
+ap1 --&gt; cr1
+ap1 --&gt; cr2
+
+ap2 --&gt; cr1
+ap2 --&gt; cr2" />
+</p>
+<p>For the next steps in this tutorial it&#8217;s not necessary to always run the full
+topology, but it doesn&#8217;t hurt either. As mentioned
+before we recommend to use the supervisor just for crate and to run an app
+instance in foreground.</p>
+<p>For the next steps we can stop an app instance and / or the haproxy:</p>
+<div class="highlight-python"><pre>$sh bin/supervisorctl stop app:app_9211
+$sh bin/supervisorctl stop haproxy</pre>
+</div>
+<p>You also can stop the second crate node:</p>
+<div class="highlight-python"><pre>$sh bin/supervisorctl stop crate:crate_4201</pre>
+</div>
+<p>So your topology looks like:</p>
+<p class="plantuml">
+<img src="_images/plantuml-09dcdf969dca0b28fe2c21df9681dc635c8e3083.png" alt="package &quot;localhost&quot; {
+    [app - 9210] as ap1
+    [crate 4200] as cr1
+}
+
+ap1 --&gt; cr1" />
+</p>
+<p>For more informations about the topology see <a class="reference internal" href="scalability_reliability.html"><em>Scalability, Reliability and a Production environment</em></a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you run both app instances and you want to request the haproxy it&#8217;s
+important to restart both app instances if you make some changes.</p>
 </div>
 </div>
 </div>
@@ -214,43 +316,6 @@ on your own following these instructions:</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Setup Your First Application</a><ul>
-<li><a class="reference internal" href="#sandboxed-development-setup">Sandboxed Development Setup</a><ul>
-<li><a class="reference internal" href="#project-template">Project Template</a></li>
-<li><a class="reference internal" href="#setup-using-the-template">Setup using the template</a></li>
-<li><a class="reference internal" href="#bootstrap-and-buildout">Bootstrap and buildout</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#non-sandboxed-development-setup">Non Sandboxed Development Setup</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="requirements.html"
-                        title="previous chapter">Requirements</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="start_coding.html"
-                        title="next chapter">Start Coding</a></p>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

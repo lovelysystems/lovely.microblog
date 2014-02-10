@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -9,7 +10,7 @@
     
     <title>Use the API within an iOS application &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lovelydoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,16 +27,9 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
     <link rel="next" title="Create new Posts in Frontend" href="frontend_create_post.html" />
-    <link rel="prev" title="Create Blogposts" href="create_blogposts.html" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
-
+    <link rel="prev" title="Create Blogposts" href="create_blogposts.html" /> 
   </head>
   <body>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -50,10 +44,57 @@
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
 
     <div class="document">
       <div class="documentwrapper">
+        
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Use the API within an iOS application</a><ul>
+<li><a class="reference internal" href="#create-the-application">Create the Application</a></li>
+<li><a class="reference internal" href="#the-timelineviewcontroller">The TimelineViewController</a></li>
+<li><a class="reference internal" href="#the-blogpost-model">The BlogPost Model</a><ul>
+<li><a class="reference internal" href="#blogpost-interface">BlogPost interface</a></li>
+<li><a class="reference internal" href="#blogpost-implementation">BlogPost implementation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setup-restkit">Setup RestKit</a></li>
+<li><a class="reference internal" href="#fill-the-timeline">Fill the Timeline</a><ul>
+<li><a class="reference internal" href="#tableview">TableView</a></li>
+<li><a class="reference internal" href="#refresh">Refresh</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#blogpost-cell">Blogpost cell</a></li>
+<li><a class="reference internal" href="#pull-to-refresh">Pull to Refresh</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="create_blogposts.html"
+                        title="previous chapter">Create Blogposts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="frontend_create_post.html"
+                        title="next chapter">Create new Posts in Frontend</a></p>
+    <div id="searchbox">
+      <h3>Quick search</h3>
+        <form class="search" action="search.html" method="get">
+          <div class="searchfield">
+            <input type="text" name="q" />
+            <input type="submit" value="" />
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+        </div>
+      </div>
         <div class="bodywrapper">
           <div class="body">
             
@@ -378,51 +419,6 @@ method:</p>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Use the API within an iOS application</a><ul>
-<li><a class="reference internal" href="#create-the-application">Create the Application</a></li>
-<li><a class="reference internal" href="#the-timelineviewcontroller">The TimelineViewController</a></li>
-<li><a class="reference internal" href="#the-blogpost-model">The BlogPost Model</a><ul>
-<li><a class="reference internal" href="#blogpost-interface">BlogPost interface</a></li>
-<li><a class="reference internal" href="#blogpost-implementation">BlogPost implementation</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#setup-restkit">Setup RestKit</a></li>
-<li><a class="reference internal" href="#fill-the-timeline">Fill the Timeline</a><ul>
-<li><a class="reference internal" href="#tableview">TableView</a></li>
-<li><a class="reference internal" href="#refresh">Refresh</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#blogpost-cell">Blogpost cell</a></li>
-<li><a class="reference internal" href="#pull-to-refresh">Pull to Refresh</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="create_blogposts.html"
-                        title="previous chapter">Create Blogposts</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="frontend_create_post.html"
-                        title="next chapter">Create new Posts in Frontend</a></p>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

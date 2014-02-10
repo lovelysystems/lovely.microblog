@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -9,7 +10,7 @@
     
     <title>Login within the iOS application &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lovelydoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,16 +26,10 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
-    <link rel="prev" title="Authentication" href="be_authentication.html" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
-
+    <link rel="next" title="Scalability, Reliability and a Production environment" href="scalability_reliability.html" />
+    <link rel="prev" title="Authentication" href="be_authentication.html" /> 
   </head>
   <body>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -42,14 +37,59 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="scalability_reliability.html" title="Scalability, Reliability and a Production environment"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="be_authentication.html" title="Authentication"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
 
     <div class="document">
       <div class="documentwrapper">
+        
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Login within the iOS application</a><ul>
+<li><a class="reference internal" href="#the-user-model">The User model</a></li>
+<li><a class="reference internal" href="#update-restkit-setup">Update RestKit Setup</a></li>
+<li><a class="reference internal" href="#the-view">The View</a></li>
+<li><a class="reference internal" href="#the-view-controller">The View Controller</a><ul>
+<li><a class="reference internal" href="#initialization">Initialization</a></li>
+<li><a class="reference internal" href="#login">login</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#present-the-login-view">Present the Login View</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="be_authentication.html"
+                        title="previous chapter">Authentication</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="scalability_reliability.html"
+                        title="next chapter">Scalability, Reliability and a Production environment</a></p>
+    <div id="searchbox">
+      <h3>Quick search</h3>
+        <form class="search" action="search.html" method="get">
+          <div class="searchfield">
+            <input type="text" name="q" />
+            <input type="submit" value="" />
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+        </div>
+      </div>
         <div class="bodywrapper">
           <div class="body">
             
@@ -291,43 +331,6 @@ After a successful login you don&#8217;t have to login again until you restart t
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Login within the iOS application</a><ul>
-<li><a class="reference internal" href="#the-user-model">The User model</a></li>
-<li><a class="reference internal" href="#update-restkit-setup">Update RestKit Setup</a></li>
-<li><a class="reference internal" href="#the-view">The View</a></li>
-<li><a class="reference internal" href="#the-view-controller">The View Controller</a><ul>
-<li><a class="reference internal" href="#initialization">Initialization</a></li>
-<li><a class="reference internal" href="#login">login</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#present-the-login-view">Present the Login View</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="be_authentication.html"
-                        title="previous chapter">Authentication</a></p>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -336,6 +339,9 @@ After a successful login you don&#8217;t have to login again until you restart t
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="scalability_reliability.html" title="Scalability, Reliability and a Production environment"
+             >next</a> |</li>
         <li class="right" >
           <a href="be_authentication.html" title="Authentication"
              >previous</a> |</li>

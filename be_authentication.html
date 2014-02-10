@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -9,7 +10,7 @@
     
     <title>Authentication &mdash; How to create high scalable web-backends for ios developers 0.0.0 documentation</title>
     
-    <link rel="stylesheet" href="_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lovelydoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,16 +27,9 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="How to create high scalable web-backends for ios developers 0.0.0 documentation" href="index.html" />
     <link rel="next" title="Login within the iOS application" href="frontend_login.html" />
-    <link rel="prev" title="Create new Posts in Frontend" href="frontend_create_post.html" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
-<!--[if lte IE 6]>
-<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
-<![endif]-->
-
+    <link rel="prev" title="Create new Posts in Frontend" href="frontend_create_post.html" /> 
   </head>
   <body>
-
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -50,10 +44,55 @@
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">How to create high scalable web-backends for ios developers 0.0.0 documentation</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
 
     <div class="document">
       <div class="documentwrapper">
+        
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Authentication</a><ul>
+<li><a class="reference internal" href="#table-users">Table users</a></li>
+<li><a class="reference internal" href="#sql-alchemy-user-model">SQL Alchemy User Model</a></li>
+<li><a class="reference internal" href="#enabling-authentication-policy">Enabling Authentication Policy</a></li>
+<li><a class="reference internal" href="#the-user-service">The user service</a><ul>
+<li><a class="reference internal" href="#the-list-method">The list method</a></li>
+<li><a class="reference internal" href="#the-register-method">The register method</a></li>
+<li><a class="reference internal" href="#the-login-method">The login method</a></li>
+<li><a class="reference internal" href="#includeme">includeme</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-the-app">Test the app</a></li>
+<li><a class="reference internal" href="#restrict-creating-blogposts">Restrict Creating Blogposts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="frontend_create_post.html"
+                        title="previous chapter">Create new Posts in Frontend</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="frontend_login.html"
+                        title="next chapter">Login within the iOS application</a></p>
+    <div id="searchbox">
+      <h3>Quick search</h3>
+        <form class="search" action="search.html" method="get">
+          <div class="searchfield">
+            <input type="text" name="q" />
+            <input type="submit" value="" />
+          </div>
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+        <p class="searchtip" style="font-size: 90%">
+        Enter search terms or a module, class or function name.
+        </p>
+    </div>
+        </div>
+      </div>
         <div class="bodywrapper">
           <div class="body">
             
@@ -347,49 +386,6 @@ $sh curl -XGET localhost:9210/blogposts
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Authentication</a><ul>
-<li><a class="reference internal" href="#table-users">Table users</a></li>
-<li><a class="reference internal" href="#sql-alchemy-user-model">SQL Alchemy User Model</a></li>
-<li><a class="reference internal" href="#enabling-authentication-policy">Enabling Authentication Policy</a></li>
-<li><a class="reference internal" href="#the-user-service">The user service</a><ul>
-<li><a class="reference internal" href="#the-list-method">The list method</a></li>
-<li><a class="reference internal" href="#the-register-method">The register method</a></li>
-<li><a class="reference internal" href="#the-login-method">The login method</a></li>
-<li><a class="reference internal" href="#includeme">includeme</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#test-the-app">Test the app</a></li>
-<li><a class="reference internal" href="#restrict-creating-blogposts">Restrict Creating Blogposts</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#test-the-application">Test the application</a></li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="frontend_create_post.html"
-                        title="previous chapter">Create new Posts in Frontend</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="frontend_login.html"
-                        title="next chapter">Login within the iOS application</a></p>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
