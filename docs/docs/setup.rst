@@ -123,24 +123,29 @@ The app script starts the app in foreground::
 
 So you can make some requests::
 
-    sh$ curl -XGET localhost:9210
-    <html>
-        ...
-        <title>404 Not Found</title>
-    ...
+    sh$ curl -XGET localhost:9210/probe_status
+    OK
 
-The supervisord script starts the app and crate in background. You have to cancel
-the app script first by pressing ^CTRL + C else supervisord can't start the app
-because the port is already in use::
+The supervisord script starts two instances of the app (ports: 9210, 9211) and two
+instances of crate (ports: 4200, 4201) in the background.
+You have to cancel the app script first by pressing ^CTRL + C else supervisord can't
+start the first app instance because the port is already in use::
 
     sh$ bin/supervisord
     sh$ bin/supervisorctl status
-    app                              RUNNING ...
-    crate                            RUNNING ...
+    app:app_9210                     RUNNING ...
+    app2:app_9211                    RUNNING ...
+    crate:crate_4200                 RUNNING ...
+    crate2:crate_4201                RUNNING ...
+    haproxy                          RUNNING ...
 
-To stop the app or crate run::
+To stop an app or a crate instance run::
 
-    sh$ bin/supervisorctl stop app
+    sh$ bin/supervisorctl stop app:app_9210
+
+To stop all app or crate instances run::
+
+    sh$ bin/supervisorctl stop "crate:*"
 
 During development you have to restart the app frequently. It's more convinient
 to use the supervisor just for crate. The app script should be started in
@@ -155,6 +160,79 @@ After starting supervisord run::
 To restart the app stop the script by pressing ^CTRL + C and start it again::
 
     sh$ bin/app
+
+HAProxy
+-------
+
+An `haproxy <http://haproxy.1wt.eu>`_ instance is also started by supervisord.
+HAProxy is a reliable, high performance TCP/HTTP load balancer. It's configured
+to listen on port 9100 and it load balances requests between the
+app instances::
+
+    sh$ curl -XGET localhost:9100/probe_status
+    OK
+
+HAProxy periodically checks the health state of the app servers by requesting
+`/probe_status`. If an instance is not reachable anymore, haproxy won't pass
+requests to it.
+
+Topology
+--------
+
+The local topology of the individual services looks as follows:
+
+.. uml::
+
+    package "localhost" {
+        [haproxy - 9100] as ha1
+        [app - 9210] as ap1
+        [crate - 4200] as cr1
+
+        [app - 9211] as ap2
+        [crate - 4201] as cr2
+
+    }
+
+    ha1 --> ap1
+    ha1 --> ap2
+
+    ap1 --> cr1
+    ap1 --> cr2
+
+    ap2 --> cr1
+    ap2 --> cr2
+
+For the next steps in this tutorial it's not necessary to always run the full
+topology, but it doesn't hurt either. As mentioned
+before we recommend to use the supervisor just for crate and to run an app
+instance in foreground.
+
+For the next steps we can stop an app instance and / or the haproxy::
+
+    $sh bin/supervisorctl stop app:app_9211
+    $sh bin/supervisorctl stop haproxy
+
+You also can stop the second crate node::
+
+    $sh bin/supervisorctl stop crate:crate_4201
+
+So your topology looks like:
+
+.. uml::
+
+    package "localhost" {
+        [app - 9210] as ap1
+        [crate 4200] as cr1
+    }
+
+    ap1 --> cr1
+
+For more informations about the topology see :doc:`scalability_reliability`.
+
+.. note::
+
+   If you run both app instances and you want to request the haproxy it's
+   important to restart both app instances if you make some changes.
 
 Non Sandboxed Development Setup
 ===============================

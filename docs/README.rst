@@ -4,6 +4,17 @@ Lovely Microblog Documentation
 
 How to create high scalable web-backends for ios developers
 
+Requirements
+============
+
+The following packages need to be installed::
+
+    brew install python27 libevent graphviz
+
+Or with macports::
+
+    sudo port install python27 libevent graphviz
+
 Initial Setup for Development
 =============================
 

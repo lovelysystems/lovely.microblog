@@ -25,7 +25,7 @@ Add the following line to the `create_cleanup.sql` file::
 
 Ensure that crate is started::
 
-    bin/supervisorctl start crate
+    bin/supervisorctl start "crate:*"
 
 Run::
 
