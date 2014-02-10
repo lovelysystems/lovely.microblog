@@ -202,7 +202,6 @@ Also add an `UIBarButton` to the navigationItem::
                                                                              target:self
                                                                              action:@selector(createNewBlogPost:)];
 
-====================
 Test the application
 ====================
 

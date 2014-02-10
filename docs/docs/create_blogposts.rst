@@ -240,7 +240,6 @@ However, the id of a model is only created when the model is written to the
 database. We perform the flush manually in order to be able to return the
 id of the created model.
 
-====================
 Test the application
 ====================
 

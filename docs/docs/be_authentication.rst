@@ -288,7 +288,6 @@ the `create` method so the correct username gets assigned to creator::
     user = security.authenticated_userid(self.request)
     blogpost.creator = user
 
-====================
 Test the application
 ====================
 
