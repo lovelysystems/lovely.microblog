@@ -5,8 +5,6 @@ import ConfigParser
 from setuptools import setup, find_packages
 
 
-execfile(os.path.join(os.path.dirname(__file__), 'microblog/__init__.py'))
-
 versionf_content = open("microblog/__init__.py").read()
 version_rex = r'^__version__ = [\'"]([^\'"]*)[\'"]$'
 m = re.search(version_rex, versionf_content, re.M)
