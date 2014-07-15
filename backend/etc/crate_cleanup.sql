@@ -1,2 +1,2 @@
-drop table blogpost
-drop table users
+drop table blogpost;
+drop table users;

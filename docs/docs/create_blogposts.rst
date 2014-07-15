@@ -15,9 +15,14 @@ We want the `blogpost` table to have these columns::
     - creator: name of the creator
 
 Open the file `<project-dir>/etc/crate_setup.sql` and add the following sql
-expression::
+statement::
 
-    create table blogpost (id string primary key, created timestamp, text string, creator string)
+    create table blogpost (
+        id string primary key,
+        created timestamp,
+        text string,
+        creator string
+    );
 
 Add the following line to the `create_cleanup.sql` file::
 
@@ -57,13 +62,6 @@ If you want to reset crate run::
     +-----------------------+-----------+-----------+---------+
     CONNECT OK
     CREATE OK (0.083 sec)
-
-.. note::
-
-   The crate_cleanup and crate_setup scripts just pipe the contents of the sql
-   files to bin/crash. So every line in the script gets executed as a separate
-   command. Therefore you cannot split an expression into multiple lines
-   and you have to ommit semicolons at the end of the statements.
 
 You can open the following url with your browser to
 access the crate admin interface and inspect the created table::

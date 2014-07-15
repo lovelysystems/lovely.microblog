@@ -26,7 +26,11 @@ We want to create a very basic user table with these columns::
 Open the file `<project-dir>/etc/crate_setup.sql` and add the following SQL
 statement::
 
-    create table users (id string primary key, name string, password string)
+    create table users (
+        id string primary key, 
+        name string,
+        password string
+    );
 
 Add the following line to the `create_cleanup.sql` file::
 
