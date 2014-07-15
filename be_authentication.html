@@ -119,7 +119,11 @@ We&#8217;ll change that to allow only registered users to create blogposts.</p>
 </div>
 <p>Open the file <cite>&lt;project-dir&gt;/etc/crate_setup.sql</cite> and add the following SQL
 statement:</p>
-<div class="highlight-python"><pre>create table users (id string primary key, name string, password string)</pre>
+<div class="highlight-python"><pre>create table users (
+    id string primary key,
+    name string,
+    password string
+);</pre>
 </div>
 <p>Add the following line to the <cite>create_cleanup.sql</cite> file:</p>
 <div class="highlight-python"><pre>drop table users</pre>
